@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="zh">
+    <string name="string_filter_ui_icon_description">icon</string>
+    <string name="string_filter_ui_add_button">Add</string>
+    <string name="data_range_from">from</string>
+    <string name="data_range_to">to</string>
+    <string name="value_range_min_value">最小值</string>
+    <string name="value_range_max_value">最大值</string>
+    <string name="rules_in_current_config">当前配置下的规则列表</string>
+</resources>

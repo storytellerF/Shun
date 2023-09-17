@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/show_sort_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort Show"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/start_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort"
+        app:layout_constraintEnd_toEndOf="@+id/show_sort_dialog"
+        app:layout_constraintStart_toStartOf="@+id/show_sort_dialog"
+        app:layout_constraintTop_toBottomOf="@+id/show_sort_dialog" />
+
+    <Button
+        android:id="@+id/show_filter_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter Show"
+        app:layout_constraintEnd_toEndOf="@+id/start_sort"
+        app:layout_constraintStart_toStartOf="@+id/start_sort"
+        app:layout_constraintTop_toBottomOf="@+id/start_sort" />
+
+    <Button
+        android:id="@+id/start_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="Filter"
+        app:layout_constraintEnd_toEndOf="@+id/show_filter_dialog"
+        app:layout_constraintStart_toStartOf="@+id/show_filter_dialog"
+        app:layout_constraintTop_toBottomOf="@+id/show_filter_dialog" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_filter"
+        tools:listitem="@layout/layout_item_application" />
+</androidx.constraintlayout.widget.ConstraintLayout>

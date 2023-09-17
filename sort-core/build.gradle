@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+def javaVersion = JavaVersion.VERSION_1_8
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = javaVersion.toString()
+    }
+}
+
+dependencies {
+    implementation(project("${parent.path}:config-core"))
+}

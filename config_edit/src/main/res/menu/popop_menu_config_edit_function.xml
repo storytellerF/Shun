@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/config_edit_popup_menu_new"
+        android:title="@string/string_config_edit_popup_new" />
+    <item
+        android:id="@+id/config_edit_popop_menu_clone"
+        android:title="@string/string_config_edit_popup_clone" />
+    <item
+        android:id="@+id/config_edit_popop_menu_rename"
+        android:title="@string/string_config_edit_popup_rename" />
+    <item
+        android:id="@+id/config_edit_popop_menu_delete"
+        android:title="@string/string_config_edit_popup_delete" />
+    <item
+        android:id="@+id/config_edit_popop_menu_import"
+        android:title="@string/string_config_edit_popup_import" />
+    <item
+        android:id="@+id/config_edit_popop_menu_export"
+        android:title="@string/string_config_edit_popup_export" />
+</menu>

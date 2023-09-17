@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+def javaVersion = JavaVersion.VERSION_1_8
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(javaVersion.majorVersion))
+    }
+}
+dependencies {
+    api 'org.danilopianini:gson-extras:1.2.0'
+    api group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+}

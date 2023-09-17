@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="zh">
+    <string name="string_config_edit_popup_clone">克隆</string>
+    <string name="string_config_edit_popup_rename">重命名</string>
+    <string name="string_config_edit_popup_delete">删除</string>
+    <string name="string_config_edit_popup_import">导入</string>
+    <string name="string_config_edit_popup_export">导出</string>
+    <string name="string_config_edit_popup_new">新建</string>
+    <string name="string_content_description_menu_image_button">菜单按钮</string>
+</resources>
