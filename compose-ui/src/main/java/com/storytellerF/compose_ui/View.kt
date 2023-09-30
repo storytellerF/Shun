@@ -100,7 +100,8 @@ fun <O : Core, T> SimpleFilterView(
                     selectedCalendar.set(Calendar.SECOND, oldCalendar.get(Calendar.SECOND))
                     if (showDateDialog == DatePickerAt.start) {
                         refresh.change(dup(selectedCalendar.time, filter.item.endTime))
-                    } else refresh.change(dup(filter.item.startTime, selectedCalendar.time))
+                    } else
+                        refresh.change(dup(filter.item.startTime, selectedCalendar.time))
                 }
             }) {
             DatePicker(state = datePickerState)
@@ -123,7 +124,8 @@ fun <O : Core, T> SimpleFilterView(
             calendar.set(Calendar.MINUTE, minute1)
             if (showTimeDialog == DatePickerAt.start) {
                 refresh.change(dup(calendar.time, filter.item.endTime))
-            } else refresh.change(dup(filter.item.startTime, calendar.time))
+            } else
+                refresh.change(dup(filter.item.startTime, calendar.time))
         }, text = {
             TimePicker(state = timePickerState)
         })
@@ -136,26 +138,26 @@ fun <T, O : Core> SimpleFilterView(
     refresh: ItemChange<O>,
     dup: (String) -> O,
 ) {
-    Row {
-        Column {
-            Text(text = filter.showName)
-            TextField(value = filter.regexp.orEmpty(), onValueChange = {
-                val n = dup(it)
-                refresh.change(n)
-            })
-        }
+    Column(modifier = Modifier.padding(8.dp)) {
+        Text(text = filter.showName, modifier = Modifier.padding(8.dp))
+        TextField(value = filter.regexp.orEmpty(), onValueChange = {
+            val n = dup(it)
+            refresh.change(n)
+        }, modifier = Modifier.padding(horizontal = 8.dp))
     }
 }
 
 @Composable
-fun<Item> SortView(
+fun <Item> SortView(
     chain: SortChain<Item>,
-    refresh: ItemChange<SortChain<Item>>
+    refresh: ItemChange<SortChain<Item>>,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(text = chain.showName, modifier = Modifier
-            .padding(8.dp)
-            .weight(1f))
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)) {
+        Text(
+            text = chain.showName, modifier = Modifier
+                .padding(8.dp)
+                .weight(1f)
+        )
         Switch(checked = chain.item.sortDirection == SortConfigItem.up, onCheckedChange = {
             val new = chain.dup() as SortChain<Item>
             new.item.sortDirection = if (it) SortConfigItem.up else SortConfigItem.down

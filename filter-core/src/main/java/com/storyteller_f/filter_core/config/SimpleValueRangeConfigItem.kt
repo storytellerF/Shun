@@ -6,8 +6,8 @@ abstract class SimpleValueRangeConfigItem(
     override var minValue: Double,
     override var maxValue: Double,
     override var hasMinValue: Boolean,
-    override var hasMaxValue: Boolean
-) : FilterConfigItem(), ValueRange {
+    override var hasMaxValue: Boolean, id: Long
+) : FilterConfigItem(id), ValueRange {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

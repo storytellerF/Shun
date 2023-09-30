@@ -3,8 +3,11 @@ package com.storyteller_f.filter_core.config
 import com.storyteller_f.filter_core.filter.DateRange
 import java.util.Date
 
-abstract class SimpleDateConfigItem(override var startTime: Date?, override var endTime: Date?) :
-    FilterConfigItem(),
+abstract class SimpleDateConfigItem(
+    override var startTime: Date?, override var endTime: Date?,
+    id: Long
+) :
+    FilterConfigItem(id),
     DateRange {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

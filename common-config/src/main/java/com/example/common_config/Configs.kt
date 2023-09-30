@@ -9,7 +9,7 @@ import com.example.common_config.sort.NameSort
 import com.example.common_config.sort.PackageSort
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.storyteller_f.config_core.ConfigItem
-import com.storyteller_f.config_core.DefaultDialog
+import com.storyteller_f.config_core.SimpleListener
 import com.storyteller_f.filter_core.Filter
 import com.storyteller_f.filter_core.config.FilterConfigItem
 import com.storyteller_f.sort_core.config.SortChain
@@ -53,39 +53,28 @@ val filterAdapterFactory: RuntimeTypeAdapterFactory<ConfigItem> = RuntimeTypeAda
     .registerSubtype(PackageFilter.ConfigItem::class.java, "package")
 
 fun buildFilterListener() =
-    object : DefaultDialog.Listener<Filter<ApplicationItem>, FilterConfigItem> {
+    object : SimpleListener<Filter<ApplicationItem>, FilterConfigItem>() {
         override fun onSaveState(oList: List<Filter<ApplicationItem>>) =
             oList.extractFilterConfig
 
         override fun onRestoreState(configItems: List<FilterConfigItem>) =
             configItems.buildFilter
 
-        override fun onActiveChanged(activeList: List<Filter<ApplicationItem>>) {}
-        override fun onEditingChanged(editing: List<Filter<ApplicationItem>>) {
-
-        }
     }
 
-fun buildFilters() = buildList {
+fun filters() = buildList {
     add(
-        PackageFilter.ConfigItem(
-            ""
-        )
+        PackageFilter.ConfigItem("", 0)
     )
     add(
-        NameFilter.ConfigItem(
-            ""
-        )
+        NameFilter.ConfigItem("", 0)
     )
     add(
-        DateFilter.ConfigItem(
-            null,
-            null
-        )
+        DateFilter.ConfigItem(null, null, 0)
     )
     add(
         AppSizeFilter.ConfigItem(
-            0.0, 0.0, hasMinValue = false, hasMaxValue = false
+            0.0, 0.0, hasMinValue = false, hasMaxValue = false, 0
         )
     )
 }.buildFilter
@@ -104,27 +93,22 @@ val List<SortConfigItem>.buildSortChain
 val List<SortChain<ApplicationItem>>.extractSortConfig
     get() = mapNotNull {
         when (it) {
-            is PackageSort -> (PackageSort.Config())
+            is PackageSort -> it.item
 
-            is NameSort -> (NameSort.Config())
+            is NameSort -> it.item
 
-            is DateSort -> (DateSort.Config())
+            is DateSort -> it.item
             else -> null
         }
     }
 
 fun buildSortListener() =
-    object : DefaultDialog.Listener<SortChain<ApplicationItem>, SortConfigItem> {
+    object : SimpleListener<SortChain<ApplicationItem>, SortConfigItem>() {
         override fun onSaveState(oList: List<SortChain<ApplicationItem>>) =
             oList.extractSortConfig
 
         override fun onRestoreState(configItems: List<SortConfigItem>) =
             configItems.buildSortChain
-
-        override fun onActiveChanged(activeList: List<SortChain<ApplicationItem>>) = Unit
-        override fun onEditingChanged(editing: List<SortChain<ApplicationItem>>) {
-
-        }
     }
 
 val sortAdapterFactory: RuntimeTypeAdapterFactory<ConfigItem> = RuntimeTypeAdapterFactory.of(
@@ -132,7 +116,7 @@ val sortAdapterFactory: RuntimeTypeAdapterFactory<ConfigItem> = RuntimeTypeAdapt
 ).registerSubtype(PackageSort.Config::class.java, "package")
     .registerSubtype(NameSort.Config::class.java, "name")
 
-fun buildSortChains() = buildList {
-    add(PackageSort(PackageSort.Config()))
-    add(NameSort(NameSort.Config()))
+fun sortChains() = buildList {
+    add(PackageSort(PackageSort.Config(0)))
+    add(NameSort(NameSort.Config(0)))
 }

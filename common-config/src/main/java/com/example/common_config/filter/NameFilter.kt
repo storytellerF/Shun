@@ -14,7 +14,7 @@ class NameFilter(item: SimpleRegExpConfigItem) :
 
     override fun dup() = NameFilter(item.dup() as SimpleRegExpConfigItem)
 
-    class ConfigItem(regexp: String?) : SimpleRegExpConfigItem(regexp!!) {
-        override fun dup() = ConfigItem(regexp)
+    class ConfigItem(regexp: String?, id: Long) : SimpleRegExpConfigItem(regexp!!, id) {
+        override fun dup() = ConfigItem(regexp, System.currentTimeMillis())
     }
 }

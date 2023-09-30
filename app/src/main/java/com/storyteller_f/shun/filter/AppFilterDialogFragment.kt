@@ -2,7 +2,7 @@ package com.storyteller_f.shun.filter
 
 import com.example.common_config.ApplicationItem
 import com.example.common_config.buildFilterListener
-import com.example.common_config.buildFilters
+import com.example.common_config.filters
 import com.example.common_config.filterAdapterFactory
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.storyteller_f.config_core.ConfigItem
@@ -25,6 +25,6 @@ class AppFilterDialogFragment : FilterDialogFragment<ApplicationItem>() {
         get() = buildFilterListener()
 
     override val filters: List<Filter<ApplicationItem>>
-        get() = buildFilters()
+        get() = filters()
 
 }

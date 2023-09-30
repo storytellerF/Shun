@@ -3,7 +3,6 @@ package com.storyteller_f.sort_core.config
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.storyteller_f.config_core.Config
 import com.storyteller_f.config_core.Core
-import com.storyteller_f.config_core.Duplicable
 import java.util.Objects
 
 /**
@@ -12,7 +11,7 @@ import java.util.Objects
  * @param <T> 需要处理的数据类型
 </T> */
 abstract class SortChain<T>(showName: String, var item: SortConfigItem) : Core(showName),
-    Comparator<T>, Duplicable {
+    Comparator<T> {
 
     abstract val itemViewType: Int
     override fun equals(other: Any?): Boolean {

@@ -14,7 +14,7 @@ class DateFilter(item: SimpleDateConfigItem) :
 
     override fun dup() = DateFilter(item.dup() as SimpleDateConfigItem)
 
-    class ConfigItem(start: Date?, end: Date?) : SimpleDateConfigItem(start, end) {
-        override fun dup() = ConfigItem(startTime, endTime)
+    class ConfigItem(start: Date?, end: Date?, id: Long) : SimpleDateConfigItem(start, end, id) {
+        override fun dup() = ConfigItem(startTime, endTime, System.currentTimeMillis())
     }
 }

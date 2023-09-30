@@ -17,8 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.common_config.buildFilterListener
-import com.example.common_config.buildFilters
-import com.example.common_config.buildSortChains
+import com.example.common_config.filters
+import com.example.common_config.sortChains
 import com.example.common_config.buildSortListener
 import com.example.common_config.filter.DateFilter
 import com.example.common_config.filter.NameFilter
@@ -80,19 +80,19 @@ fun Greeting() {
     if (showFilterDialog) FilterDialog(
         "filter", {
             showFilterDialog = false
-        }, listenerWrapper(buildFilterListener()).second, buildFilters(), filterAdapterFactory
+        }, listenerWrapper(buildFilterListener()).second, filters(), filterAdapterFactory
     ) { filter, refresh ->
         when (filter) {
             is NameFilter -> SimpleFilterView(filter, refresh) {
-                NameFilter(NameFilter.ConfigItem(it.trim()))
+                NameFilter(NameFilter.ConfigItem(it.trim(), filter.id))
             }
 
             is PackageFilter -> SimpleFilterView(filter = filter, refresh = refresh) {
-                PackageFilter(PackageFilter.ConfigItem(it.trim()))
+                PackageFilter(PackageFilter.ConfigItem(it.trim(), filter.id))
             }
 
             is DateFilter -> SimpleFilterView(filter, refresh) { start, end ->
-                DateFilter(DateFilter.ConfigItem(start, end))
+                DateFilter(DateFilter.ConfigItem(start, end, filter.id))
             }
         }
 
@@ -102,7 +102,7 @@ fun Greeting() {
         {
             showSortDialog = false
         },
-        buildSortListener(), buildSortChains(), sortAdapterFactory,
+        buildSortListener(), sortChains(), sortAdapterFactory,
     ) { chain, refresh ->
         SortView(chain, refresh)
     }

@@ -95,16 +95,18 @@ class FilterDialog<Item>(
             addItemDecoration(GeneralItemDecoration(context!!))
             adapter = filterItemAdapter
         }
-        val callback = DragItemHelper(editing, filterItemAdapter).apply {
-            listener = object : DragItemHelper.Listener {
-                override fun onRemoved(position: Int, removed: Any?) {
-                    val filter = removed as Filter<Item>
-                    Snackbar.make(root, "remove " + filter.showName, Snackbar.LENGTH_SHORT)
+        val callback = DragItemHelper(filterItemAdapter).apply {
+            dragAndSwipe = object : DragAndSwipe {
+                override fun onRemoved(position: Int) {
+                    val removed = editing[position]
+                    Snackbar.make(root, "remove " + removed.showName, Snackbar.LENGTH_SHORT)
                         .setAction("undo") {
-                            editing.add(position, filter)
+                            editing.add(position, removed)
                             filterItemAdapter.notifyItemInserted(position)
                         }.show()
                 }
+
+                override fun onMoved(from: Int, to: Int) = tempMove(from, to)
             }
         }
         ItemTouchHelper(callback).apply {

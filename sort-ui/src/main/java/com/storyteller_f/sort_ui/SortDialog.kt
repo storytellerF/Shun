@@ -94,16 +94,18 @@ class SortDialog<Item>(
             adapter = sortItemAdapter
         }
 
-        val callback = DragItemHelper(editing, sortItemAdapter).apply {
-            listener = object : DragItemHelper.Listener {
-                override fun onRemoved(position: Int, removed: Any?) {
-                    val filter = removed as SortChain<Item>
-                    Snackbar.make(root, "remove " + filter.showName, Snackbar.LENGTH_SHORT)
+        val callback = DragItemHelper(sortItemAdapter).apply {
+            dragAndSwipe = object : DragAndSwipe {
+                override fun onRemoved(position: Int) {
+                    val removed = editing[position]
+                    Snackbar.make(root, "remove " + removed.showName, Snackbar.LENGTH_SHORT)
                         .setAction("undo") { _: View? ->
-                            editing.add(position, filter)
+                            editing.add(position, removed)
                             sortItemAdapter.notifyItemInserted(position)
                         }.show()
                 }
+
+                override fun onMoved(from: Int, to: Int) = tempMove(from, to)
             }
         }
         ItemTouchHelper(callback).apply {

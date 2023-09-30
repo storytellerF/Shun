@@ -3,6 +3,7 @@ package com.storyteller_f.config_core
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.Collections
 
 /**
  * Dialog 操作Editor，Editor 操作ConfigManager
@@ -55,6 +56,11 @@ abstract class DefaultDialog<C : Config, Item, O, CItem : ConfigItem>(val listen
         listener.onEditingChanged(editing.toList())
     }
 
+    fun tempMove(from: Int, to: Int) {
+        move(from, to, editing)
+        listener.onEditingChanged(editing.toList())
+    }
+
     /**
      * 保存当前修改的配置
      */
@@ -86,6 +92,27 @@ abstract class DefaultDialog<C : Config, Item, O, CItem : ConfigItem>(val listen
         fun onActiveChanged(activeList: List<O>)
 
         fun onEditingChanged(editing: List<O>)
+    }
+
+    interface DragAndSwipe {
+        fun onRemoved(position: Int)
+
+        fun onMoved(from: Int, to: Int)
+    }
+
+
+    companion object {
+        fun <T> move(fromPosition: Int, toPosition: Int, objects: MutableList<T>) {
+            if (fromPosition < toPosition) {
+                for (i in fromPosition until toPosition) {
+                    Collections.swap(objects, i, i + 1)
+                }
+            } else {
+                for (i in fromPosition downTo toPosition + 1) {
+                    Collections.swap(objects, i, i - 1)
+                }
+            }
+        }
     }
 }
 
@@ -140,6 +167,14 @@ class WrappedDialogListener<O, CItem : ConfigItem>(
         _editing.value = editing
         l.onEditingChanged(editing)
     }
+
+}
+
+abstract class SimpleListener<O, CItem : ConfigItem> : DefaultDialog.Listener<O, CItem> {
+
+    override fun onActiveChanged(activeList: List<O>) = Unit
+
+    override fun onEditingChanged(editing: List<O>) = Unit
 
 }
 

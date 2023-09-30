@@ -108,7 +108,7 @@ class Editor<C : Config>(
      * @param position 应该大于等于0，其中0 会被认为没有选中任何Config
      * @return 返回当前选中的配置。
      */
-    fun chooseConfig(position: Int): C? {
+    private fun chooseConfig(position: Int): C? {
         assert(position >= 0)
         val config = if (position == UNSELECTED_INDEX) null else getConfigAt(position - 1)
         val i = config?.id ?: Config.NONE_ID//如果查找不到合法的id，相当于当前没有启用任何配置

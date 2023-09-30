@@ -4,7 +4,7 @@ import com.storyteller_f.config_core.ConfigItem
 import java.io.Serializable
 import java.util.Objects
 
-abstract class SortConfigItem(var sortDirection: Int = up) : ConfigItem(), Serializable {
+abstract class SortConfigItem(id: Long, var sortDirection: Int = up) : ConfigItem(id), Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

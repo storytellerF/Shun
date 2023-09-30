@@ -1,3 +1,7 @@
 package com.storyteller_f.config_core
 
-open class Core(val showName: String)
+interface Identify {
+    val id: Long
+}
+
+abstract class Core(val showName: String): Identify, Duplicable

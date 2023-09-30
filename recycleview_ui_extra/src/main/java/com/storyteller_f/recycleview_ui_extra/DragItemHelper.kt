@@ -2,15 +2,14 @@ package com.storyteller_f.recycleview_ui_extra
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Collections
+import com.storyteller_f.config_core.DefaultDialog
 
 class DragItemHelper(
-    private val objects: MutableList<*>,
     private val myAdapter: RecyclerView.Adapter<*>
 ) :
     ItemTouchHelper.Callback() {
     @JvmField
-    var listener: Listener? = null
+    var dragAndSwipe:  DefaultDialog.DragAndSwipe? = null
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
@@ -27,28 +26,15 @@ class DragItemHelper(
         val fromPosition = viewHolder.adapterPosition
         //拿到当前拖拽到的item的viewHolder
         val toPosition = target.adapterPosition
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(objects, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(objects, i, i - 1)
-            }
-        }
+        dragAndSwipe?.onMoved(fromPosition, toPosition)
         myAdapter.notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val adapterPosition = viewHolder.adapterPosition
-        val removed: Any? = objects.removeAt(adapterPosition)
+        dragAndSwipe?.onRemoved(adapterPosition)
         myAdapter.notifyItemRemoved(adapterPosition)
-        if (listener != null) listener!!.onRemoved(adapterPosition, removed)
     }
 
-    @FunctionalInterface
-    interface Listener {
-        fun onRemoved(position: Int, removed: Any?)
-    }
 }

@@ -1,8 +1,10 @@
 package com.storytellerF.compose_ui
 
 import android.content.Context
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.gson.TypeAdapterFactory
@@ -53,6 +56,10 @@ import com.storyteller_f.sort_core.config.sortConfigAdapterFactory
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 
 fun interface ItemChange<O> {
     fun change(new: O)
@@ -171,6 +178,9 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
         *factory,
     )
     val scope = rememberCoroutineScope()
+    val draggingState = rememberReorderableLazyListState(onMove = { from, to ->
+        simpleDialog?.tempMove(from.index, to.index)
+    })
     Column {
         Header(simpleDialog, currentSelected, count, chooseConfig = {
             simpleDialog?.chooseConfig(it)
@@ -181,13 +191,28 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
         AddFunction(filters) {
             simpleDialog?.addToEditing(it)
         }
-        LazyColumn(modifier = Modifier.height(90.dp)) {
-            items(editingList.size) { index ->
-                val it = editingList[index]
+
+        LazyColumn(
+            modifier = Modifier
+                .height(120.dp)
+                .reorderable(draggingState).detectReorderAfterLongPress(draggingState),
+            state = draggingState.listState
+        ) {
+            items(editingList.size, key = {
+                editingList[it].id
+            }) { index ->
+                val data = editingList[index]
                 val refresh = ItemChange<O> {
                     simpleDialog?.replace(it, index)
                 }
-                content(it, refresh)
+
+                ReorderableItem(reorderableState = draggingState, key = data.id) { isDragging ->
+                    val elevation = animateDpAsState(if (isDragging) 1.dp else 0.dp, label = "ele")
+                    Box(modifier = Modifier.shadow(elevation = elevation.value)) {
+                        content(data, refresh)
+                    }
+                }
+
             }
         }
     }
@@ -349,7 +374,7 @@ private fun <O : Core> AddFunction(
         DropdownMenu(expanded = showFilterMenu, onDismissRequest = { showFilterMenu = false }) {
             filters.forEach {
                 DropdownMenuItem(text = { Text(text = it.showName) }, onClick = {
-                    addCore(it)
+                    addCore(it.dup() as O)
                     showFilterMenu = false
                 })
             }

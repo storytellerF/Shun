@@ -1,7 +1,7 @@
 package com.storyteller_f.shun.sort
 
 import com.example.common_config.ApplicationItem
-import com.example.common_config.buildSortChains
+import com.example.common_config.sortChains
 import com.example.common_config.buildSortListener
 import com.example.common_config.sortAdapterFactory
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
@@ -17,7 +17,7 @@ class AppSortDialogFragment : SortDialogFragment<ApplicationItem>() {
         get() = buildSortListener()
 
     override val sortChains: List<SortChain<ApplicationItem>>
-        get() = buildSortChains()
+        get() = sortChains()
 
     override val viewHolderFactory: SortViewHolderFactory<ApplicationItem>
         get() = ApplicationSortFactory()
