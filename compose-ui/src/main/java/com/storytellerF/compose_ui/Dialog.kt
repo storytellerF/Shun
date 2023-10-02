@@ -374,6 +374,7 @@ private fun <O : Core> AddFunction(
         DropdownMenu(expanded = showFilterMenu, onDismissRequest = { showFilterMenu = false }) {
             filters.forEach {
                 DropdownMenuItem(text = { Text(text = it.showName) }, onClick = {
+                    @Suppress("UNCHECKED_CAST")
                     addCore(it.dup() as O)
                     showFilterMenu = false
                 })

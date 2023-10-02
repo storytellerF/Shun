@@ -33,6 +33,7 @@ abstract class DefaultDialog<C : Config, Item, O, CItem : ConfigItem>(val listen
     private fun readHistoryToEditing(config: C?) {
         editing.clear()
         if (config != null) {
+            @Suppress("UNCHECKED_CAST")
             addAll(listener.onRestoreState(config.configItems.toList() as List<CItem>))
         }
         listener.onEditingChanged(editing.toList())
@@ -122,6 +123,7 @@ open class SimpleDialog<C : Config, Item, O, CItem : ConfigItem>(
 ) : DefaultDialog<C, Item, O, CItem>(
     listener
 ) {
+    @Suppress("UNCHECKED_CAST")
     override val lastConfig: C?
         get() = editor.lastConfig as? C
 

@@ -24,6 +24,7 @@ fun <C : Config> EditorKey.editor(
 ): Editor<C> {
     val cache = editors[this]
 
+    @Suppress("UNCHECKED_CAST")
     return if (cache == null) {
         val gson: Gson = factory.createGson()
 
@@ -71,6 +72,7 @@ class Editor<C : Config>(
             listener.onConfigSelectedChanged(index, config, count())
         } else if (selectedIndex != UNSELECTED_INDEX) {
             val indexAtCore = selectedIndex - 1
+            @Suppress("UNCHECKED_CAST")
             when (command) {
                 "clone" -> clone(getConfigAt(indexAtCore) as C)
                 "delete" -> delete(indexAtCore)
@@ -89,6 +91,7 @@ class Editor<C : Config>(
             val index = 0
             val config = getConfigAt(index)
             choose(config.id)
+            @Suppress("UNCHECKED_CAST")
             listener.onConfigSelectedChanged(index, config as C, count())
         } else {
             listener.onConfigSelectedChanged(Config.NONE_INDEX, null, count())
@@ -96,7 +99,7 @@ class Editor<C : Config>(
     }
 
     private fun clone(config: C) {
-        val clone: C = config.dup() as C
+        @Suppress("UNCHECKED_CAST") val clone: C = config.dup() as C
         clone.name += "克隆"
         choose(addConfig(clone))
         listener.onConfigSelectedChanged(lastIndex, clone, count())
@@ -114,6 +117,7 @@ class Editor<C : Config>(
         val i = config?.id ?: Config.NONE_ID//如果查找不到合法的id，相当于当前没有启用任何配置
         choose(i)
         save()
+        @Suppress("UNCHECKED_CAST")
         return config as C?
     }
 

@@ -159,7 +159,7 @@ fun <Item> SortView(
                 .weight(1f)
         )
         Switch(checked = chain.item.sortDirection == SortConfigItem.up, onCheckedChange = {
-            val new = chain.dup() as SortChain<Item>
+            @Suppress("UNCHECKED_CAST") val new = chain.dup() as SortChain<Item>
             new.item.sortDirection = if (it) SortConfigItem.up else SortConfigItem.down
             refresh.change(new)
         }, modifier = Modifier.padding(horizontal = 8.dp))

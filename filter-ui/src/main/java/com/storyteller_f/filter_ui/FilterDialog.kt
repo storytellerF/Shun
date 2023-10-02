@@ -71,6 +71,7 @@ class FilterDialog<Item>(
     }
 
     private fun addToEnd(t: Filter<Item>) {
+        @Suppress("UNCHECKED_CAST")
         addToEditing(t.dup() as Filter<Item>)
         filterItemAdapter.notifyItemInserted(length - 1)
     }
