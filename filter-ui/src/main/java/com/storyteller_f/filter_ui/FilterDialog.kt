@@ -1,5 +1,6 @@
 package com.storyteller_f.filter_ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -58,6 +59,7 @@ class FilterDialog<Item>(
                 .clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         }
         configEditor.init(name, object : Editor.Listener<FilterConfig> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onConfigSelectedChanged(
                 configIndex: Int,
                 config: FilterConfig?,

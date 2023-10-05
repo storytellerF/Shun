@@ -1,5 +1,6 @@
 package com.storyteller_f.sort_ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -55,6 +56,7 @@ class SortDialog<Item : Any>(
         })
         selfDialog = builder.create()
         configEditor.init(name, object : Editor.Listener<SortConfig> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onConfigSelectedChanged(
                 configIndex: Int,
                 config: SortConfig?,
