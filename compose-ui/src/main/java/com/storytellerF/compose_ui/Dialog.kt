@@ -337,7 +337,7 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
         CommonRenameDialog(renameText, {
             renameText = ""
         }, {
-            val dup = lastConfig?.dup() as C
+            @Suppress("UNCHECKED_CAST") val dup = lastConfig?.dup() as C
             dup.name = renameText
             updateConfig(dup)
         })

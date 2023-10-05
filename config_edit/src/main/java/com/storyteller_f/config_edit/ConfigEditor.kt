@@ -103,6 +103,7 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
         override fun getCount() = editor.count() + 1
 
         override fun getItem(position: Int): C? {
+            @Suppress("UNCHECKED_CAST")
             return if (position == 0) null else editor.getConfigAt(position - 1) as C
         }
 
@@ -151,7 +152,7 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
         val selectedItem = spinner.selectedItem ?: return true
         Log.i(TAG, "initTwo: " + selectedItem.javaClass)
         if (selectedItem !is Config) return true
-        val selected = selectedItem as C
+        @Suppress("UNCHECKED_CAST") val selected = selectedItem as C
         val editText = EditText(context)
         editText.setText(selected.name)
         val alertDialog =

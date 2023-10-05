@@ -2,8 +2,8 @@ package com.storyteller_f.shun.filter
 
 import com.example.common_config.ApplicationItem
 import com.example.common_config.buildFilterListener
-import com.example.common_config.filters
 import com.example.common_config.filterAdapterFactory
+import com.example.common_config.filters
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.storyteller_f.config_core.ConfigItem
 import com.storyteller_f.config_core.DefaultDialog

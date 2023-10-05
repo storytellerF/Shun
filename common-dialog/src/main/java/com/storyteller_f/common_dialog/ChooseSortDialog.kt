@@ -37,7 +37,4 @@ class ChooseSortDialog(context: Context, config: List<Core>) {
         alertDialog!!.show()
     }
 
-    fun close() {
-        alertDialog!!.dismiss()
-    }
 }

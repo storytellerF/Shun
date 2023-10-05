@@ -2,7 +2,6 @@ package com.storyteller_f.sort_core.config
 
 import com.storyteller_f.config_core.ConfigItem
 import java.io.Serializable
-import java.util.Objects
 
 abstract class SortConfigItem(id: Long, name: String?, var sortDirection: Int = UP) : ConfigItem(id, name), Serializable {
 

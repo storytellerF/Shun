@@ -1,9 +1,9 @@
 package com.storyteller_f.shun.sort
 
 import com.example.common_config.ApplicationItem
-import com.example.common_config.sortChains
 import com.example.common_config.buildSortListener
 import com.example.common_config.sortAdapterFactory
+import com.example.common_config.sortChains
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.storyteller_f.config_core.ConfigItem
 import com.storyteller_f.config_core.DefaultDialog
