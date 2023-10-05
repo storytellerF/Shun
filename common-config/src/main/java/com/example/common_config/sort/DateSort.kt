@@ -19,9 +19,9 @@ class DateSort(showName: String, item: Config) : SortChain<ApplicationItem>(
         return DateSort(showName, item.dup() as Config)
     }
 
-    class Config(id: Long) : SortConfigItem(id) {
+    class Config(id: Long, name: String?) : SortConfigItem(id, name) {
         override fun dup(): Config {
-            return Config(System.currentTimeMillis())
+            return Config(System.currentTimeMillis(), name)
         }
     }
 }

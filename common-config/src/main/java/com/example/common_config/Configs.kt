@@ -64,17 +64,17 @@ fun buildFilterListener() =
 
 fun filters() = buildList {
     add(
-        PackageFilter.ConfigItem("", 0)
+        PackageFilter.ConfigItem("", 0, null)
     )
     add(
-        NameFilter.ConfigItem("", 0)
+        NameFilter.ConfigItem("", 0, null)
     )
     add(
-        DateFilter.ConfigItem(null, null, 0)
+        DateFilter.ConfigItem(null, null, 0, null)
     )
     add(
         AppSizeFilter.ConfigItem(
-            0.0, 0.0, hasMinValue = false, hasMaxValue = false, 0
+            0.0, 0.0, hasMinValue = false, hasMaxValue = false, 0, null
         )
     )
 }.buildFilter
@@ -117,6 +117,6 @@ val sortAdapterFactory: RuntimeTypeAdapterFactory<ConfigItem> = RuntimeTypeAdapt
     .registerSubtype(NameSort.Config::class.java, "name")
 
 fun sortChains() = buildList {
-    add(PackageSort(PackageSort.Config(0)))
-    add(NameSort(NameSort.Config(0)))
+    add(PackageSort(PackageSort.Config(0, null)))
+    add(NameSort(NameSort.Config(0, null)))
 }

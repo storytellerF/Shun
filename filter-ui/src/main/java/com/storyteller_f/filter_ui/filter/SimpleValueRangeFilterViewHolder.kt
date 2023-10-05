@@ -4,7 +4,9 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
+import com.storyteller_f.common_dialog.RenameDialog
 import com.storyteller_f.filter_core.Filter
 import com.storyteller_f.filter_core.filter.simple.SimpleValueRangeFilter
 import com.storyteller_f.filter_ui.R
@@ -12,19 +14,29 @@ import com.storyteller_f.filter_ui.adapter.FilterItemContainer
 import com.storyteller_f.filter_ui.adapter.FilterItemViewHolder
 
 class SimpleValueRangeFilterViewHolder<T>(itemView: View) : FilterItemViewHolder<T>(itemView) {
-    var name: TextView
-    private var min: EditText
-    private var max: EditText
+    val name: TextView
+    private val min: EditText
+    private val max: EditText
+    private val editButton: ImageButton
 
     init {
         name = itemView.findViewById(R.id.value_range_label)
         min = itemView.findViewById(R.id.value_range_min)
         max = itemView.findViewById(R.id.value_range_max)
+        editButton = itemView.findViewById(R.id.edit_name)
     }
 
     override fun bind(filterChain: Filter<T>) {
-        name.text = filterChain.showName
         if (filterChain is SimpleValueRangeFilter<T>) {
+            editButton.setOnClickListener {
+                RenameDialog(it.context, filterChain.currentName) { newName ->
+                    @Suppress("UNCHECKED_CAST") val dup =
+                        filterChain.dup() as SimpleValueRangeFilter<T>
+                    dup.item.name = newName
+                    refresh?.invoke(dup)
+                }.show()
+            }
+            name.text = filterChain.currentName
             @Suppress("UNCHECKED_CAST") val duplicated =
                 filterChain.dup() as SimpleValueRangeFilter<T>
             min.setText(String.format("%s", duplicated.minValue))
@@ -37,7 +49,7 @@ class SimpleValueRangeFilterViewHolder<T>(itemView: View) : FilterItemViewHolder
                     duplicated.item.hasMinValue = true
                     duplicated.item.minValue = trim.toDouble()
                 }
-                refresh?.onChanged(v, duplicated)
+                refresh?.invoke(duplicated)
                 false
             }
             max.setOnKeyListener { v: View, _: Int, _: KeyEvent? ->
@@ -48,7 +60,7 @@ class SimpleValueRangeFilterViewHolder<T>(itemView: View) : FilterItemViewHolder
                     duplicated.item.hasMaxValue = true
                     duplicated.item.maxValue = trim.toDouble()
                 }
-                refresh?.onChanged(v, duplicated)
+                refresh?.invoke(duplicated)
                 false
             }
         }

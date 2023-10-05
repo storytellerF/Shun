@@ -28,4 +28,4 @@ class FilterConfig(name: String) : Config(name, 0) {
     }
 }
 
-abstract class FilterConfigItem(id: Long) : ConfigItem(id)
+abstract class FilterConfigItem(id: Long, name: String?) : ConfigItem(id, name)

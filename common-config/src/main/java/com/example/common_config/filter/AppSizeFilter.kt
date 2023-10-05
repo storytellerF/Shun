@@ -13,8 +13,8 @@ class AppSizeFilter(item: SimpleValueRangeConfigItem) :
 
     override fun dup() = AppSizeFilter(item.dup() as SimpleValueRangeConfigItem)
 
-    class ConfigItem(min: Double, max: Double, hasMinValue: Boolean, hasMaxValue: Boolean, id: Long) :
-        SimpleValueRangeConfigItem(min, max, hasMinValue, hasMaxValue, id) {
-        override fun dup() = ConfigItem(minValue, maxValue, hasMinValue, hasMaxValue, System.currentTimeMillis())
+    class ConfigItem(min: Double, max: Double, hasMinValue: Boolean, hasMaxValue: Boolean, id: Long, name: String?) :
+        SimpleValueRangeConfigItem(min, max, hasMinValue, hasMaxValue, id, name) {
+        override fun dup() = ConfigItem(minValue, maxValue, hasMinValue, hasMaxValue, System.currentTimeMillis(), name)
     }
 }

@@ -7,12 +7,24 @@
 
     <TextView
         android:id="@+id/filter_regexp_label"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:labelFor="@id/filter_input_regexp"
+        app:layout_constraintBottom_toBottomOf="@id/edit_name"
+        app:layout_constraintEnd_toStartOf="@id/edit_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/edit_name"
         tools:text="test" />
+
+    <ImageButton
+        android:id="@+id/edit_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_edit_24"
+        app:layout_constraintBottom_toBottomOf="@id/filter_regexp_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/filter_regexp_label"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/filter_input_regexp"
@@ -23,5 +35,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_regexp_label" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

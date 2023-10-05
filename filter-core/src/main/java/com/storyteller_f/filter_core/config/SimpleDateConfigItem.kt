@@ -5,9 +5,9 @@ import java.util.Date
 
 abstract class SimpleDateConfigItem(
     override var startTime: Date?, override var endTime: Date?,
-    id: Long
+    id: Long, name: String?
 ) :
-    FilterConfigItem(id),
+    FilterConfigItem(id, name),
     DateRange {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -16,12 +16,16 @@ abstract class SimpleDateConfigItem(
         other as SimpleDateConfigItem
 
         if (startTime != other.startTime) return false
-        return endTime == other.endTime
+        if (endTime != other.endTime) return false
+        if (name != other.name) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
         var result = startTime?.hashCode() ?: 0
         result = 31 * result + (endTime?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
         return result
     }
 }

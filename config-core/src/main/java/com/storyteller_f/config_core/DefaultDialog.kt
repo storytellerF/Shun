@@ -57,6 +57,8 @@ abstract class DefaultDialog<C : Config, Item, O, CItem : ConfigItem>(val listen
         listener.onEditingChanged(editing.toList())
     }
 
+    abstract fun replace(c: C)
+
     fun tempMove(from: Int, to: Int) {
         move(from, to, editing)
         listener.onEditingChanged(editing.toList())
@@ -126,6 +128,10 @@ open class SimpleDialog<C : Config, Item, O, CItem : ConfigItem>(
     @Suppress("UNCHECKED_CAST")
     override val lastConfig: C?
         get() = editor.lastConfig as? C
+
+    override fun replace(c: C) {
+        editor.replaceConfig(c, editor.lastIndex)
+    }
 
     override fun save() = editor.save()
 

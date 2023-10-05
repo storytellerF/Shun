@@ -18,9 +18,9 @@ class NameSort(sortConfigItem: SortConfigItem) :
         return NameSort(item.dup() as SortConfigItem)
     }
 
-    class Config(id: Long) : SortConfigItem(id) {
+    class Config(id: Long, name: String?) : SortConfigItem(id, name) {
         override fun dup(): Config {
-            return Config(System.currentTimeMillis())
+            return Config(System.currentTimeMillis(), name)
         }
     }
 }

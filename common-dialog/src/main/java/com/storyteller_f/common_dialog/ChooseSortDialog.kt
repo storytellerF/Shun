@@ -1,16 +1,15 @@
-package com.storyteller_f.sort_ui.choose
+package com.storyteller_f.common_dialog
 
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.storyteller_f.sort_core.config.SortChain
-import com.storyteller_f.sort_ui.R
+import com.storyteller_f.config_core.Core
 
-class ChooseSortDialog<T>(context: Context, config: List<SortChain<T>>) {
+class ChooseSortDialog(context: Context, config: List<Core>) {
     private var alertDialog: AlertDialog? = null
-    private var listener: ChooseSortAdapter.Listener<SortChain<T>>? = null
+    private var listener: ChooseSortAdapter.Listener? = null
 
     init {
         val inflate =
@@ -19,8 +18,8 @@ class ChooseSortDialog<T>(context: Context, config: List<SortChain<T>>) {
         recyclerView.layoutManager = LinearLayoutManager(context)
         val chooseSortAdapter = ChooseSortAdapter(config)
         recyclerView.adapter = chooseSortAdapter
-        chooseSortAdapter.setListener(object : ChooseSortAdapter.Listener<SortChain<T>> {
-            override fun onChoose(t: SortChain<T>) {
+        chooseSortAdapter.setListener(object : ChooseSortAdapter.Listener {
+            override fun onChoose(t: Core) {
                 if (listener != null) listener!!.onChoose(t)
                 alertDialog!!.dismiss()
             }
@@ -30,7 +29,7 @@ class ChooseSortDialog<T>(context: Context, config: List<SortChain<T>>) {
         alertDialog = builder.create()
     }
 
-    fun setListener(listener: ChooseSortAdapter.Listener<SortChain<T>>) {
+    fun setListener(listener: ChooseSortAdapter.Listener) {
         this.listener = listener
     }
 

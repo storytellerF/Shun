@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
+import com.storyteller_f.common_dialog.ChooseSortAdapter
+import com.storyteller_f.common_dialog.ChooseSortDialog
 import com.storyteller_f.config_core.ConfigItem
+import com.storyteller_f.config_core.Core
 import com.storyteller_f.config_core.DefaultDialog
 import com.storyteller_f.config_core.Editor
 import com.storyteller_f.config_edit.ConfigEditor
@@ -21,8 +24,6 @@ import com.storyteller_f.filter_core.config.FilterConfigItem
 import com.storyteller_f.filter_core.filterConfigAdapterFactory
 import com.storyteller_f.filter_ui.adapter.FilterItemAdapter
 import com.storyteller_f.filter_ui.adapter.FilterViewHolderFactory
-import com.storyteller_f.filter_ui.choose.ChooseFilterAdapter
-import com.storyteller_f.filter_ui.choose.ChooseFilterDialog
 import com.storyteller_f.filter_ui.databinding.DialogFilterBinding
 import com.storyteller_f.recycleview_ui_extra.DragItemHelper
 import com.storyteller_f.recycleview_ui_extra.GeneralItemDecoration
@@ -35,7 +36,7 @@ class FilterDialog<Item>(
     factory: FilterViewHolderFactory<Item>,
     adapterFactory: RuntimeTypeAdapterFactory<ConfigItem>
 ) : DefaultDialog<FilterConfig, Item, Filter<Item>, FilterConfigItem>(listener) {
-    private val chooseFilterDialog: ChooseFilterDialog<Item>
+    private val chooseFilterDialog: ChooseSortDialog
     private val filterItemAdapter = FilterItemAdapter(editing, factory)
     private val filterView = setupView(context)
     private val configEditor: ConfigEditor<FilterConfig> =
@@ -46,9 +47,10 @@ class FilterDialog<Item>(
     val selfDialog: AlertDialog
 
     init {
-        chooseFilterDialog = ChooseFilterDialog(context, filters)
-        chooseFilterDialog.setResultListener(object : ChooseFilterAdapter.Listener<Filter<Item>> {
-            override fun onChoose(t: Filter<Item>) = addToEnd(t)
+        chooseFilterDialog = ChooseSortDialog(context, filters)
+        chooseFilterDialog.setListener(object : ChooseSortAdapter.Listener {
+            @Suppress("UNCHECKED_CAST")
+            override fun onChoose(t: Core) = addToEnd(t as Filter<Item>)
         })
         selfDialog = builder.create()
         selfDialog.setOnShowListener {
@@ -134,6 +136,8 @@ class FilterDialog<Item>(
 
     override val lastConfig: FilterConfig?
         get() = configEditor.lastConfig as FilterConfig?
+
+    override fun replace(c: FilterConfig) = configEditor.replaceConfig(c, configEditor.lastIndex)
 
     override fun save() = configEditor.save()
 }

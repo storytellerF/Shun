@@ -24,5 +24,6 @@ abstract class SimpleRegExpFilter<T>(
         return Objects.hash(item)
     }
 
+    val currentName get() = item.name ?: showName
 
 }

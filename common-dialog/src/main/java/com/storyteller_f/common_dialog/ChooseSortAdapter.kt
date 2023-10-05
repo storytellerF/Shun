@@ -1,4 +1,4 @@
-package com.storyteller_f.sort_ui.choose
+package com.storyteller_f.common_dialog
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,27 +6,26 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.storyteller_f.sort_core.config.SortChain
-import com.storyteller_f.sort_ui.R
-import com.storyteller_f.sort_ui.choose.ChooseSortAdapter.ChooseViewHolder
+import com.storyteller_f.common_dialog.ChooseSortAdapter.ChooseViewHolder
+import com.storyteller_f.config_core.Core
 
-class ChooseSortAdapter<T>(private val config: List<SortChain<T>>) :
+class ChooseSortAdapter(private val config: List<Core>) :
     RecyclerView.Adapter<ChooseViewHolder>() {
-    private var listener: Listener<SortChain<T>>? = null
+    private var listener: Listener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseViewHolder {
         return ChooseViewHolder.create(parent)
     }
 
     override fun onBindViewHolder(holder: ChooseViewHolder, position: Int) {
         holder.bind(config[position])
-        holder.itemView.setOnClickListener { view: View? ->
+        holder.itemView.setOnClickListener {
             if (listener != null) listener!!.onChoose(
                 config[position]
             )
         }
     }
 
-    fun setListener(listener: Listener<SortChain<T>>) {
+    fun setListener(listener: Listener) {
         this.listener = listener
     }
 
@@ -35,20 +34,20 @@ class ChooseSortAdapter<T>(private val config: List<SortChain<T>>) :
     }
 
     @FunctionalInterface
-    interface Listener<T> {
-        fun onChoose(t: T)
+    interface Listener {
+        fun onChoose(t: Core)
     }
 
     class ChooseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var name: TextView
-        var icon: ImageView
+        private var icon: ImageView
 
         init {
             name = itemView.findViewById(R.id.choose_name)
             icon = itemView.findViewById(R.id.choose_icon)
         }
 
-        fun bind(sortChain: SortChain<*>) {
+        fun bind(sortChain: Core) {
             name.text = sortChain.showName
         }
 

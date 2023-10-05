@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.DatePicker
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.TimePicker
+import com.storyteller_f.common_dialog.RenameDialog
 import com.storyteller_f.filter_core.Filter
 import com.storyteller_f.filter_core.filter.simple.SimpleDateRangeFilter
 import com.storyteller_f.filter_ui.R
@@ -26,22 +28,33 @@ abstract class SimpleDataRangeFilterViewHolder<T>(itemView: View) :
     private var name: TextView
     private var dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.CHINA)
     private var timeFormat = SimpleDateFormat("hh:mm:ss:SSS", Locale.CHINA)
+    private val editButton: ImageButton
 
     init {
         startDate = itemView.findViewById(R.id.date_range_start_date_button)
         endDate = itemView.findViewById(R.id.data_range_end_date_button2)
-        name = itemView.findViewById(R.id.data_range_show_name_textView4)
+        name = itemView.findViewById(R.id.data_range_show_name)
         startTime = itemView.findViewById(R.id.date_range_start_time_button)
         endTime = itemView.findViewById(R.id.data_range_end_time_button2)
+        editButton = itemView.findViewById(R.id.edit_name)
     }
 
     override fun bind(filterChain: Filter<T>) {
-        name.text = filterChain.showName
         if (filterChain is SimpleDateRangeFilter<T>) {
+            val name1 = filterChain.item.name ?: filterChain.showName
+            editButton.setOnClickListener {
+                RenameDialog(it.context, name1) { newName ->
+                    @Suppress("UNCHECKED_CAST") val dup =
+                        filterChain.dup() as SimpleDateRangeFilter<T>
+                    dup.item.name = newName
+                    refresh?.invoke(dup)
+                }.show()
+            }
+            name.text = name1
             val start = filterChain.startTime
             if (start != null) {
                 startDate.text = dateFormat.format(start)
-                val instance = Calendar.getInstance(Locale.CHINA)
+                val instance = Calendar.getInstance(Locale.getDefault())
                 instance.time = start
                 startDate.tag = instance
                 startTime.text = timeFormat.format(start)
@@ -49,7 +62,7 @@ abstract class SimpleDataRangeFilterViewHolder<T>(itemView: View) :
             }
             val end = filterChain.endTime
             if (end != null) {
-                val instance = Calendar.getInstance(Locale.CHINA)
+                val instance = Calendar.getInstance(Locale.getDefault())
                 instance.time = end
                 endDate.text = dateFormat.format(end)
                 endDate.tag = instance
@@ -89,7 +102,7 @@ abstract class SimpleDataRangeFilterViewHolder<T>(itemView: View) :
             if (filterChain is SimpleDateRangeFilter<T>) {
                 filterChain.item.startTime = getStartTime().time
                 filterChain.item.endTime = getEndTime().time
-                refresh?.onChanged(v, filterChain)
+                refresh?.invoke(filterChain)
             }
         }, time[Calendar.HOUR_OF_DAY], time[Calendar.MINUTE], true).show()
     }
@@ -112,7 +125,7 @@ abstract class SimpleDataRangeFilterViewHolder<T>(itemView: View) :
                 if (filterChain is SimpleDateRangeFilter<T>) {
                     filterChain.item.startTime = getStartTime().time
                     filterChain.item.endTime = getEndTime().time
-                    refresh?.onChanged(v, filterChain)
+                    refresh?.invoke(filterChain)
                 }
             },
             date[Calendar.YEAR],

@@ -22,11 +22,12 @@ import com.storyteller_f.sort_core.config.SortConfigItem
 import com.storyteller_f.sort_core.config.sortConfigAdapterFactory
 import com.storyteller_f.sort_ui.adapter.SortItemAdapter
 import com.storyteller_f.sort_ui.adapter.SortViewHolderFactory
-import com.storyteller_f.sort_ui.choose.ChooseSortAdapter
-import com.storyteller_f.sort_ui.choose.ChooseSortDialog
+import com.storyteller_f.common_dialog.ChooseSortAdapter
+import com.storyteller_f.common_dialog.ChooseSortDialog
+import com.storyteller_f.config_core.Core
 import com.storyteller_f.sort_ui.databinding.DialogSortBinding
 
-class SortDialog<Item>(
+class SortDialog<Item : Any>(
     context: Context,
     name: String,
     sortChains: List<SortChain<Item>>,
@@ -34,7 +35,8 @@ class SortDialog<Item>(
     factory: SortViewHolderFactory<Item>,
     adapterFactory: RuntimeTypeAdapterFactory<in ConfigItem>,
 ) : DefaultDialog<SortConfig, Item, SortChain<Item>, SortConfigItem>(listener) {
-    private val chooseSortDialog: ChooseSortDialog<Item> = ChooseSortDialog(context, sortChains)
+    private val chooseSortDialog: ChooseSortDialog =
+        ChooseSortDialog(context, sortChains)
     private val sortItemAdapter: SortItemAdapter<Item> = SortItemAdapter(editing, factory)
     private val inflate = setupView(context)
     private val configEditor: ConfigEditor<SortConfig> = inflate.findViewById(R.id.configEditor)
@@ -47,8 +49,9 @@ class SortDialog<Item>(
     val selfDialog: AlertDialog
 
     init {
-        chooseSortDialog.setListener(object : ChooseSortAdapter.Listener<SortChain<Item>> {
-            override fun onChoose(t: SortChain<Item>) = addToEnd(t)
+        chooseSortDialog.setListener(object : ChooseSortAdapter.Listener {
+            @Suppress("UNCHECKED_CAST")
+            override fun onChoose(t: Core) = addToEnd(t as SortChain<Item>)
         })
         selfDialog = builder.create()
         configEditor.init(name, object : Editor.Listener<SortConfig> {
@@ -117,6 +120,8 @@ class SortDialog<Item>(
 
     override val lastConfig: SortConfig?
         get() = configEditor.lastConfig as SortConfig?
+
+    override fun replace(c: SortConfig) = configEditor.replaceConfig(c, configEditor.lastIndex)
 
     override fun save() = configEditor.save()
 }

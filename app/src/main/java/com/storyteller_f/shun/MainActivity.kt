@@ -22,6 +22,7 @@ import com.storyteller_f.shun.sort.AppSortDialogFragment
 import com.storyteller_f.sort_core.config.SortChains
 import com.storyteller_f.sort_core.config.SortConfig
 import com.storyteller_f.sort_core.config.SortConfigItem
+import com.storyteller_f.sort_core.config.sortConfigAdapterFactory
 import java.io.File
 import java.util.Calendar
 import java.util.Locale
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         val createEditorKey = EditorKey.createEditorKey(filesDir.absolutePath, "sort")
         val sortChains = createEditorKey.editor(
             SortConfig.emptySortListener,
-            filterConfigAdapterFactory,
+            sortConfigAdapterFactory,
             sortAdapterFactory
         ).lastConfig?.run {
             configItems.filterIsInstance<SortConfigItem>().buildSortChain

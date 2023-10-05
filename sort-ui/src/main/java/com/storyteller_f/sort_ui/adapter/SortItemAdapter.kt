@@ -1,10 +1,8 @@
 package com.storyteller_f.sort_ui.adapter
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.storyteller_f.sort_core.config.SortChain
-import com.storyteller_f.sort_ui.adapter.SortItemViewHolder.SortItemChanged
 
 class SortItemAdapter<T>(
     private val sortChains: MutableList<SortChain<T>>,
@@ -19,11 +17,9 @@ class SortItemAdapter<T>(
 
     override fun onBindViewHolder(holder: SortItemViewHolder<T>, position: Int) {
         val adapterPosition = holder.adapterPosition
-        holder.refresh = object : SortItemChanged {
-            override fun onChanged(v: View, sortChain: SortChain<*>) {
-                sortChains[adapterPosition] = sortChain as SortChain<T>
-                this@SortItemAdapter.notifyItemChanged(adapterPosition)
-            }
+        holder.refresh = {
+            sortChains[adapterPosition] = it
+            this@SortItemAdapter.notifyItemChanged(adapterPosition)
         }
         holder.bind(sortChains[position])
     }

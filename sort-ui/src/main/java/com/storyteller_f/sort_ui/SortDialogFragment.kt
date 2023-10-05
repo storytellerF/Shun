@@ -10,7 +10,7 @@ import com.storyteller_f.sort_core.config.SortConfigItem
 import com.storyteller_f.sort_ui.adapter.SortViewHolderFactory
 import java.io.IOException
 
-abstract class SortDialogFragment<T> : DialogFragment() {
+abstract class SortDialogFragment<T : Any> : DialogFragment() {
     abstract val dialogListener: DefaultDialog.Listener<SortChain<T>, SortConfigItem>
 
     abstract val sortChains: List<SortChain<T>>

@@ -12,3 +12,4 @@ if (!System.env.JITPACK) {
     include ':app'
     include ':testcompose'
 }
+include ':common-dialog'

@@ -13,6 +13,8 @@ abstract class SimpleValueRangeFilter<T>(
     ValueRangeFilter<T>(
         showName
     ), ValueRange by item, Identify by item {
+    val currentName: String = item.name ?: showName
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false

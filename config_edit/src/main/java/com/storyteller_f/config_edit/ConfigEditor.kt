@@ -190,6 +190,8 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
     override fun choose(id: Int) = editor.choose(id)
 
     override fun addConfig(newConfig: Config) = editor.addConfig(newConfig)
+    override fun replaceConfig(newConfig: Config, index: Int) =
+        editor.replaceConfig(newConfig, index)
 
     /**
      * spinner 选择和点击保存时触发

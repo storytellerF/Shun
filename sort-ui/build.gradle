@@ -44,6 +44,7 @@ dependencies {
     implementation project("${parent.path}:recycleview_ui_extra")
     implementation(project("${parent.path}:config-core"))
     implementation(project("${parent.path}:sort-core"))
+    implementation(project("${parent.path}:common-dialog"))
     api project("${parent.path}:config_edit")
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

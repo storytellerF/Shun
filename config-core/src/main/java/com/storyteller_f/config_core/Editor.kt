@@ -31,13 +31,13 @@ fun <C : Config> EditorKey.editor(
         if (!file.exists() && !file.createNewFile()) {
             throw Exception("${file.absolutePath} 不存在，且创建失败")
         }
-        val configManager = file.inputStream().use {
-            gson.fromJson(InputStreamReader(it), ConfigManager::class.java)
-                ?: ConfigManager().apply {
+        val shun = file.inputStream().use {
+            gson.fromJson(InputStreamReader(it), Shun::class.java)
+                ?: Shun().apply {
                     newConfig(listener)
                 }
         }
-        val defaultValue = Editor(this, listener, gson, configManager)
+        val defaultValue = Editor(this, listener, gson, shun)
 
         editors[this] = defaultValue
         defaultValue
@@ -52,12 +52,12 @@ class Editor<C : Config>(
     editorKey: EditorKey,
     private val listener: Listener<C>,
     private val gson: Gson,
-    private val configManager: ConfigManager,
-) : ConfigIndex by configManager {
+    private val shun: Shun,
+) : ConfigIndex by shun {
     private val file = editorKey.file
 
     fun save() = FileWriter(file).use {
-        val output = gson.toJson(configManager)
+        val output = gson.toJson(shun)
         it.write(output)
         it.flush()
     }
@@ -68,7 +68,7 @@ class Editor<C : Config>(
     fun sendCommand(command: String, selectedIndex: Int) {
         assert(selectedIndex >= 0)
         if (command == "new") {
-            val (index, config) = configManager.newConfig(listener)
+            val (index, config) = shun.newConfig(listener)
             listener.onConfigSelectedChanged(index, config, count())
         } else if (selectedIndex != UNSELECTED_INDEX) {
             val indexAtCore = selectedIndex - 1
@@ -159,7 +159,7 @@ private fun Array<out TypeAdapterFactory?>.createGson(): Gson {
     return gsonBuilder.create()
 }
 
-private fun <C : Config> ConfigManager.newConfig(listener: Editor.Listener<C>): Pair<Int, C> {
+private fun <C : Config> Shun.newConfig(listener: Editor.Listener<C>): Pair<Int, C> {
     val config = listener.onNew()
     addConfig(config)
     val index = count() - 1

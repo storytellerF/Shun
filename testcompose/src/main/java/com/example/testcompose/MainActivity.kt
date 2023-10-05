@@ -17,14 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.common_config.buildFilterListener
-import com.example.common_config.filters
-import com.example.common_config.sortChains
 import com.example.common_config.buildSortListener
 import com.example.common_config.filter.DateFilter
 import com.example.common_config.filter.NameFilter
 import com.example.common_config.filter.PackageFilter
 import com.example.common_config.filterAdapterFactory
+import com.example.common_config.filters
 import com.example.common_config.sortAdapterFactory
+import com.example.common_config.sortChains
 import com.example.testcompose.ui.theme.ShunTheme
 import com.storytellerF.compose_ui.FilterDialog
 import com.storytellerF.compose_ui.SimpleFilterView
@@ -83,17 +83,78 @@ fun Greeting() {
         }, listenerWrapper(buildFilterListener()).second, filters(), filterAdapterFactory
     ) { filter, refresh ->
         when (filter) {
-            is NameFilter -> SimpleFilterView(filter, refresh) {
-                NameFilter(NameFilter.ConfigItem(it.trim(), filter.id))
-            }
+            is NameFilter -> SimpleFilterView(
+                filter,
+                updateName = {
+                    refresh.change(
+                        NameFilter(
+                            NameFilter.ConfigItem(
+                                filter.item.regexp,
+                                filter.id,
+                                it
+                            )
+                        )
+                    )
+                },
+                {
+                    refresh.change(
+                        NameFilter(
+                            NameFilter.ConfigItem(
+                                it.trim(),
+                                filter.id,
+                                filter.item.name
+                            )
+                        )
+                    )
+                },
+            )
 
-            is PackageFilter -> SimpleFilterView(filter = filter, refresh = refresh) {
-                PackageFilter(PackageFilter.ConfigItem(it.trim(), filter.id))
-            }
+            is PackageFilter -> SimpleFilterView(filter = filter, updateName = {
+                refresh.change(
+                    PackageFilter(
+                        PackageFilter.ConfigItem(
+                            filter.item.regexp,
+                            filter.id,
+                            it
+                        )
+                    )
+                )
+            }, updateRegExp = {
+                refresh.change(
+                    PackageFilter(
+                        PackageFilter.ConfigItem(
+                            it.trim(),
+                            filter.id,
+                            filter.item.name
+                        )
+                    )
+                )
+            })
 
-            is DateFilter -> SimpleFilterView(filter, refresh) { start, end ->
-                DateFilter(DateFilter.ConfigItem(start, end, filter.id))
-            }
+            is DateFilter -> SimpleFilterView(filter, updateDate = { start, end ->
+                refresh.change(
+                    DateFilter(
+                        DateFilter.ConfigItem(
+                            start,
+                            end,
+                            filter.id,
+                            filter.item.name
+                        )
+                    )
+                )
+            }, updateName = {
+                refresh.change(
+                    DateFilter(
+                        DateFilter.ConfigItem(
+                            filter.startTime,
+                            filter.endTime,
+                            filter.id,
+                            it
+                        )
+                    )
+                )
+
+            })
         }
 
     }

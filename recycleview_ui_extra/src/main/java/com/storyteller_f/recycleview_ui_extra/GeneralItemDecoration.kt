@@ -22,8 +22,6 @@ class GeneralItemDecoration(context: Context) : ItemDecoration() {
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (view.layoutParams.height == 0) {
-            outRect[0, 0, 0] = 0
-        } else outRect[0, 0, 0] = divider!!.intrinsicWidth
+        outRect.bottom = divider!!.intrinsicHeight
     }
 }

@@ -182,7 +182,9 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
         simpleDialog?.tempMove(from.index, to.index)
     })
     Column {
-        Header(simpleDialog, currentSelected, count, chooseConfig = {
+        Header(simpleDialog, currentSelected, count, {
+            simpleDialog?.replace(it)
+        }, chooseConfig = {
             simpleDialog?.chooseConfig(it)
         }) { name: String ->
             simpleDialog?.sendCommand(name, currentConfigIndex + 1)
@@ -195,7 +197,8 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
         LazyColumn(
             modifier = Modifier
                 .height(120.dp)
-                .reorderable(draggingState).detectReorderAfterLongPress(draggingState),
+                .reorderable(draggingState)
+                .detectReorderAfterLongPress(draggingState),
             state = draggingState.listState
         ) {
             items(editingList.size, key = {
@@ -254,6 +257,7 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
     simpleDialog: SimpleDialog<C, Item, O, CItem>?,
     lastConfig: C?,
     count: Int,
+    updateConfig: (C) -> Unit,
     chooseConfig: (Int) -> Unit,
     sendCommand: (String) -> Unit
 ) {
@@ -267,15 +271,16 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
         sendCommand(it)
         showMenu = false
     }
-    val chooseAndHideSpinner = { i: Int ->
-        chooseConfig(i)
-        showSpinner = false
-    }
+
     var renameText by remember {
         mutableStateOf("")
     }
-    var showRenameDialog by remember {
-        mutableStateOf(false)
+    val closeSpinner = {
+        showSpinner = false
+    }
+    val chooseAndHideSpinner = { i: Int ->
+        chooseConfig(i)
+        closeSpinner()
     }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Button(onClick = {
@@ -286,7 +291,7 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
             )
         }
         DropdownMenu(expanded = showSpinner, onDismissRequest = {
-            showSpinner = false
+            closeSpinner()
         }) {
             Text(text = "none", modifier = Modifier
                 .padding(8.dp)
@@ -319,7 +324,6 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
                 showMenu = false
                 if (lastConfig != null) {
                     renameText = lastConfig.name
-                    showRenameDialog = true
                 }
             })
             DropdownMenuItem(
@@ -329,31 +333,47 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
             DropdownMenuItem(text = { Text(text = "output") }, onClick = { /*TODO*/ })
         }
     }
-    if (showRenameDialog) {
-        AlertDialog(onDismissRequest = {
-            showRenameDialog = false
-        }, confirmButton = {
-            Button(onClick = {
-                lastConfig?.name = renameText
-                showRenameDialog = false
-            }) {
-                Text(text = "ok")
-            }
-
-        }, dismissButton = {
-            Button(onClick = { showRenameDialog = false }) {
-                Text(text = "cancel")
-            }
-        }, title = {
-            Text(text = "rename")
-        }, text = {
-            TextField(value = renameText, onValueChange = {
-                renameText = it
-            })
+    if (renameText.isNotEmpty()) {
+        CommonRenameDialog(renameText, {
+            renameText = ""
+        }, {
+            val dup = lastConfig?.dup() as C
+            dup.name = renameText
+            updateConfig(dup)
         })
     }
 
 
+}
+
+@Composable
+fun CommonRenameDialog(init: String = "", closeDialog: () -> Unit, update: (String) -> Unit) {
+    var renameText by remember {
+        mutableStateOf(init)
+    }
+    AlertDialog(onDismissRequest = {
+        closeDialog()
+    }, confirmButton = {
+        Button(onClick = {
+            if (renameText.trim().isNotEmpty()) {
+                update(renameText)
+                closeDialog()
+            }
+        }) {
+            Text(text = "ok")
+        }
+
+    }, dismissButton = {
+        Button(onClick = { closeDialog() }) {
+            Text(text = "cancel")
+        }
+    }, title = {
+        Text(text = "rename")
+    }, text = {
+        TextField(value = renameText, onValueChange = {
+            renameText = it
+        })
+    })
 }
 
 @Composable

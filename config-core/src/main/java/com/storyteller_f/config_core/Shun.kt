@@ -15,12 +15,14 @@ interface ConfigIndex {
     fun choose(id: Int)
 
     fun addConfig(newConfig: Config): Int
+
+    fun replaceConfig(newConfig: Config, index: Int)
 }
 
 /**
  * id 和索引都是从0 开始计算
  */
-class ConfigManager : ConfigIndex {
+class Shun : ConfigIndex {
     private val configs = ArrayList<Config>()
 
     /**
@@ -60,6 +62,10 @@ class ConfigManager : ConfigIndex {
         nextId++
         configs.add(newConfig)
         return newConfig.id
+    }
+
+    override fun replaceConfig(newConfig: Config, index: Int) {
+        configs[index] = newConfig
     }
 
     override fun getConfigAt(index: Int) = configs[index]

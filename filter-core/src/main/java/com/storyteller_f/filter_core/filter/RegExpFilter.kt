@@ -4,13 +4,12 @@ import com.storyteller_f.filter_core.Filter
 import java.util.regex.Pattern
 
 interface RegExp {
-    val regexp: String?
+    val regexp: String
 }
 
 abstract class RegExpFilter<T>(showName: String) : Filter<T>(showName), RegExp {
     override fun filter(t: T): Boolean {
-        val currentRegExp = regexp ?: return true
-        return Pattern.compile(currentRegExp).matcher(getMatchString(t)).find()
+        return Pattern.compile(regexp).matcher(getMatchString(t)).find()
     }
 
     /**

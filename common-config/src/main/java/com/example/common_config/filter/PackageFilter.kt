@@ -14,7 +14,7 @@ class PackageFilter(item: SimpleRegExpConfigItem) :
 
     override fun dup() = PackageFilter(item.dup() as SimpleRegExpConfigItem)
 
-    class ConfigItem(regexp: String?, id: Long) : SimpleRegExpConfigItem(regexp!!, id) {
-        override fun dup() = ConfigItem(regexp, System.currentTimeMillis())
+    class ConfigItem(regexp: String, id: Long, name: String?) : SimpleRegExpConfigItem(regexp, id, name) {
+        override fun dup() = ConfigItem(regexp, System.currentTimeMillis(), name)
     }
 }

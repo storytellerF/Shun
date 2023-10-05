@@ -7,7 +7,7 @@ class SortChains<T>(private val sortChain: List<SortChain<T>>): Comparator<T> {
     override fun compare(p0: T, p1: T): Int {
         for (it in sortChain) {
             val item = it.item
-            val i = if (item.sortDirection == SortConfigItem.up) {
+            val i = if (item.sortDirection == SortConfigItem.UP) {
                 it.compare(p0, p1)
             } else {
                 it.compare(p1, p0)
