@@ -4,38 +4,38 @@ plugins {
 }
 
 android {
-    namespace "com.storytellerF.compose_ui"
-    compileSdk 34
+    namespace = "com.storytellerF.compose_ui"
+    compileSdk = 34
 
     defaultConfig {
-        minSdk 24
+        minSdk = 24
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
-    def javaVersion = JavaVersion.VERSION_1_8
+    val javaVersion = JavaVersion.VERSION_1_8
     compileOptions {
-        sourceCompatibility javaVersion
-        targetCompatibility javaVersion
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
     kotlinOptions {
         jvmTarget = javaVersion.toString()
     }
     buildFeatures { // Enables Jetpack Compose for this module
-        compose true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.7"
+        kotlinCompilerExtensionVersion = rootProject.ext.get("composeVersion") as String
     }
 }
 
@@ -47,7 +47,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    def composeVersion = "1.5.0"
+    val composeVersion = "1.5.2"
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
@@ -55,8 +55,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.0-alpha06")
     implementation("androidx.compose.material3:material3:1.2.0-alpha08")
 
-    api(project("${parent.path}:config-core"))
-    api(project("${parent.path}:filter-core"))
-    api(project("${parent.path}:sort-core"))
+    api(project("${parent?.path}:config-core"))
+    api(project("${parent?.path}:filter-core"))
+    api(project("${parent?.path}:sort-core"))
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 }

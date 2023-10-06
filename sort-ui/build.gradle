@@ -32,6 +32,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
     namespace 'com.storyteller_f.sort_ui'
 }
 
