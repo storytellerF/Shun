@@ -41,7 +41,7 @@ class SimpleValueRangeFilterViewHolder<T>(itemView: View) : FilterItemViewHolder
                 filterChain.dup() as SimpleValueRangeFilter<T>
             min.setText(String.format("%s", duplicated.minValue))
             max.setText(String.format("%s", duplicated.maxValue))
-            min.setOnKeyListener { v: View, _: Int, _: KeyEvent? ->
+            min.setOnKeyListener { _: View, _: Int, _: KeyEvent? ->
                 val trim = min.text.toString().trim { it <= ' ' }
                 if (trim.isEmpty()) {
                     duplicated.item.hasMinValue = false
@@ -52,7 +52,7 @@ class SimpleValueRangeFilterViewHolder<T>(itemView: View) : FilterItemViewHolder
                 refresh?.invoke(duplicated)
                 false
             }
-            max.setOnKeyListener { v: View, _: Int, _: KeyEvent? ->
+            max.setOnKeyListener { _: View, _: Int, _: KeyEvent? ->
                 val trim = max.text.toString().trim { it <= ' ' }
                 if (trim.isEmpty()) {
                     duplicated.item.hasMaxValue = false

@@ -160,7 +160,7 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
                 .setPositiveButton("确认", null)
                 .setNegativeButton("取消") { dialog: DialogInterface, _: Int -> dialog.dismiss() }
                 .show()
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { v: View? ->
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             val trim = editText.text.toString().trim { it <= ' ' }
             if (trim.isNotEmpty()) {
                 selected.name = trim

@@ -1,6 +1,17 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    `maven-publish`
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                from(components["release"])
+            }
+        }
+    }
 }
 
 android {
@@ -23,12 +34,13 @@ android {
             )
         }
     }
+    val javaVersion = JavaVersion.VERSION_1_8
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = javaVersion.toString()
     }
 }
 
