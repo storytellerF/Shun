@@ -17,10 +17,11 @@ plugins {
 
 val publishArtifact = listOf(
     "common-dialog",
-    "compose-ui",
     "config_edit",
+    "recycleview_ui_extra",
+    "compose-ui",
     "filter-ui",
-    "recycleview_ui_extra", "sort-ui"
+    "sort-ui"
 )
 
 val publishJavaArtifact = listOf(
@@ -28,9 +29,9 @@ val publishJavaArtifact = listOf(
 )
 
 subprojects {
-    if (publishArtifact.contains(name)) {
-        plugins.apply("common-publish")
-    }
+//    if (publishArtifact.contains(name)) {
+//        plugins.apply("common-publish")
+//    }
     if (publishJavaArtifact.contains(name)) {
         plugins.apply("common-publish")
     }
