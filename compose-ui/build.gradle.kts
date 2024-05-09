@@ -24,7 +24,7 @@ android {
             )
         }
     }
-    val javaVersion = JavaVersion.VERSION_1_8
+    val javaVersion = JavaVersion.VERSION_17
     compileOptions {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion

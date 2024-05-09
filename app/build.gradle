@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    def javaVersion = JavaVersion.VERSION_1_8
+    def javaVersion = JavaVersion.VERSION_17
     compileOptions {
         sourceCompatibility javaVersion
         targetCompatibility javaVersion

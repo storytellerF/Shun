@@ -29,7 +29,7 @@ android {
             )
         }
     }
-    val javaVersion = JavaVersion.VERSION_1_8
+    val javaVersion = JavaVersion.VERSION_17
     compileOptions {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
@@ -41,7 +41,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources {

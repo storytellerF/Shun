@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
 }
 
-val javaVersion = JavaVersion.VERSION_1_8
+val javaVersion = JavaVersion.VERSION_17
 java {
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
