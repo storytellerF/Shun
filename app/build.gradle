@@ -35,11 +35,11 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.7.0'
+    implementation libs.androidx.annotation
     implementation(fileTree(dir: "libs", includes: ["*.jar"]))
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.constraintlayout
     implementation project(":config-core")
     implementation project(":filter-core")
     implementation project(":sort-core")
@@ -48,8 +48,8 @@ dependencies {
     implementation project(path: ':sort-ui')
     implementation(project(":common-config"))
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 //    implementation("com.github.storytellerF.Bao:startup:2.3.0")
 }

@@ -1,17 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    extra.apply {
-        set("composeVersion", "1.5.0")
-    }
-}
-
 plugins {
-    val androidVersion = "8.4.0"
-    val kotlinVersion = "1.9.0"
-    id("com.android.application") version androidVersion apply false
-    id("com.android.library") version androidVersion apply false
-    id("org.jetbrains.kotlin.android") version kotlinVersion apply false
-    id("org.jetbrains.kotlin.jvm") version kotlinVersion apply false
+    alias(libs.plugins.android) apply false
+    alias(libs.plugins.kotlin) apply false
     id("common-publish") apply false
 }
 

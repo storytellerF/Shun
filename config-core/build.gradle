@@ -14,7 +14,7 @@ kotlin {
     }
 }
 dependencies {
-    api 'org.danilopianini:gson-extras:1.2.0'
-    api group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    api libs.gson.extras
+    api libs.gson
+    implementation(libs.kotlinx.coroutines.core)
 }
