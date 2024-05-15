@@ -72,7 +72,7 @@ class Editor<C : Config>(
      */
     fun sendCommand(command: String, selectedIndex: Int) {
         assert(selectedIndex >= 0)
-        if (command == "new") {
+        if (command == COMMAND_NEW) {
             val (index, config) = shun.newConfig(listener)
             listener.onConfigChanged(list())//增加
             listener.onConfigSelectedChanged(index, config)//选中新添加的
@@ -80,8 +80,8 @@ class Editor<C : Config>(
             val indexAtCore = selectedIndex - 1
             @Suppress("UNCHECKED_CAST")
             when (command) {
-                "clone" -> clone(getConfigAt(indexAtCore) as C)
-                "delete" -> delete(indexAtCore)
+                COMMAND_CLONE -> clone(getConfigAt(indexAtCore) as C)
+                COMMAND_DELETE -> delete(indexAtCore)
             }
         }
 
@@ -165,10 +165,16 @@ class Editor<C : Config>(
          * 对应ConfigManager 的[Config.NONE_INDEX]
          */
         const val UNSELECTED_INDEX = 0
+        const val COMMAND_NEW = "new"
+        const val COMMAND_CLONE = "clone"
+        const val COMMAND_DELETE = "delete"
     }
 }
 
 private fun Array<out TypeAdapterFactory?>.createGson(): Gson {
+    assert(size >= 2) {
+        "至少提供两个Factory，一个用于解析Config，一个用于解析ConfigItem"
+    }
     val gsonBuilder = GsonBuilder()
     for (factory in this) {
         gsonBuilder.registerTypeAdapterFactory(factory)

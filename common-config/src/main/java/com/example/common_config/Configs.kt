@@ -46,7 +46,7 @@ val List<Filter<ApplicationItem>>.extractFilterConfig
     }
 
 val filterAdapterFactory: RuntimeTypeAdapterFactory<ConfigItem> = RuntimeTypeAdapterFactory.of(
-    ConfigItem::class.java, "config_edit_config_key"
+    ConfigItem::class.java, ConfigItem.DEFAULT_FACTORY_KEY
 ).registerSubtype(DateFilter.ConfigItem::class.java, "date")
     .registerSubtype(NameFilter.ConfigItem::class.java, "name")
     .registerSubtype(AppSizeFilter.ConfigItem::class.java, "app size")
@@ -112,7 +112,7 @@ fun buildSortListener() =
     }
 
 val sortAdapterFactory: RuntimeTypeAdapterFactory<ConfigItem> = RuntimeTypeAdapterFactory.of(
-    ConfigItem::class.java, "config_edit_sort_key"
+    ConfigItem::class.java, ConfigItem.DEFAULT_SORT_FACTORY_KEY
 ).registerSubtype(PackageSort.Config::class.java, "package")
     .registerSubtype(NameSort.Config::class.java, "name")
 

@@ -27,7 +27,7 @@ abstract class SortChain<T>(showName: String, var item: SortConfigItem) : Core(s
 }
 
 val sortConfigAdapterFactory: RuntimeTypeAdapterFactory<Config> = RuntimeTypeAdapterFactory.of(
-    Config::class.java, "config_edit_sort_config_key"
+    Config::class.java, Config.DEFAULT_SORT_FACTORY_KEY
 ).registerSubtype(
     SortConfig::class.java, "sort-config"
 )

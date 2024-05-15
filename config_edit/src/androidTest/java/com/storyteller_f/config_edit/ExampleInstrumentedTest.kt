@@ -27,7 +27,7 @@ class ExampleInstrumentedTest {
         file.delete()
         val configEditor = ConfigEditor<TestConfig>(appContext, null)
         val configAdapterFactory: RuntimeTypeAdapterFactory<Config> = RuntimeTypeAdapterFactory.of(
-            Config::class.java, "config_edit_filter_config_key"
+            Config::class.java, Config.DEFAULT_FACTORY_KEY
         ).registerSubtype(
             TestConfig::class.java, "filter-config"
         )

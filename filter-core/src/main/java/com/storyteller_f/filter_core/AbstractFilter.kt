@@ -35,8 +35,11 @@ abstract class Filter<T>(showName: String?) : AbstractFilter<T>(
     showName!!
 )
 
+/**
+ * 不添加此Factory 会出现错误
+ */
 val filterConfigAdapterFactory: RuntimeTypeAdapterFactory<Config> = RuntimeTypeAdapterFactory.of(
-    Config::class.java, "config_edit_filter_config_key"
+    Config::class.java, Config.DEFAULT_FACTORY_KEY
 ).registerSubtype(
     FilterConfig::class.java, "filter-config"
 )
