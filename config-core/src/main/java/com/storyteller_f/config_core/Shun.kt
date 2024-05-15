@@ -1,7 +1,18 @@
 package com.storyteller_f.config_core
 
 interface ConfigIndex {
+    /**
+     * 上一次的索引位置，从0开始
+     *
+     * @return 如果找不到返回-1
+     */
     val lastIndex: Int
+
+    /**
+     * 获取正在选中的项
+     *
+     * @return 正在选中的项
+     */
     val lastConfig: Config?
 
     fun getConfigAt(index: Int): Config
@@ -17,6 +28,15 @@ interface ConfigIndex {
     fun addConfig(newConfig: Config): Int
 
     fun replaceConfig(newConfig: Config, index: Int)
+}
+
+fun ConfigIndex.list(): List<Config> {
+    val total = count()
+    return buildList {
+        repeat(total) {
+            add(getConfigAt(it))
+        }
+    }
 }
 
 /**
@@ -35,20 +55,10 @@ class Shun : ConfigIndex {
      */
     private var nextId = 0
 
-    /**
-     * 上一次的索引位置
-     *
-     * @return 如果找不到返回-1
-     */
     override val lastIndex: Int
         get() = getIndex(lastId)
 
     override val lastConfig: Config?
-        /**
-         * 获取正在选中的项
-         *
-         * @return 正在选中的项
-         */
         get() = getConfig(lastId)
 
     /**

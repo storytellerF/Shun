@@ -21,7 +21,8 @@ class FilterConfig(name: String) : Config(name, 0) {
             FilterConfig("未命名" + Calendar.getInstance(Locale.CHINA).timeInMillis)
 
         val emptyFilterListener = object : Editor.Listener<FilterConfig> {
-            override fun onConfigSelectedChanged(configIndex: Int, config: FilterConfig?, total: Int) {}
+            override fun onConfigSelectedChanged(configIndex: Int, config: FilterConfig?) {}
+            override fun onConfigChanged(list: List<Config>) {}
 
             override fun onNew() = create()
         }

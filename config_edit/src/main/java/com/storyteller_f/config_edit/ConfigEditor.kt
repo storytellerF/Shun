@@ -74,12 +74,16 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
         spinnerAdapter: SpinnerAdapter
     ) = EditorKey.createEditorKey(context.filesDir.absolutePath, name)
         .editor(object : Editor.Listener<C> {
-            override fun onConfigSelectedChanged(configIndex: Int, config: C?, total: Int) {
+            override fun onConfigSelectedChanged(configIndex: Int, config: C?) {
                 //接受editor 的变化
                 (spinnerAdapter as BaseAdapter).notifyDataSetChanged()
                 spinner.setSelection(configIndex + 1)
                 //向下传递
-                editorListener.onConfigSelectedChanged(configIndex, config, total)
+                editorListener.onConfigSelectedChanged(configIndex, config)
+            }
+
+            override fun onConfigChanged(list: List<Config>) {
+
             }
 
             override fun onNew() = editorListener.onNew()

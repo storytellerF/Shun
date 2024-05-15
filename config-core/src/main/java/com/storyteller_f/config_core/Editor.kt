@@ -62,14 +62,20 @@ class Editor<C : Config>(
         it.flush()
     }
 
+    init {
+        listener.onConfigChanged(list())//初始化成功
+    }
+
     /**
+     * 第0个元素代表spinner 中的空选项，所以如果要真正执行操作，需要大于0
      * @param selectedIndex 大于等于0
      */
     fun sendCommand(command: String, selectedIndex: Int) {
         assert(selectedIndex >= 0)
         if (command == "new") {
             val (index, config) = shun.newConfig(listener)
-            listener.onConfigSelectedChanged(index, config, count())
+            listener.onConfigChanged(list())//增加
+            listener.onConfigSelectedChanged(index, config)//选中新添加的
         } else if (selectedIndex != UNSELECTED_INDEX) {
             val indexAtCore = selectedIndex - 1
             @Suppress("UNCHECKED_CAST")
@@ -87,14 +93,15 @@ class Editor<C : Config>(
     private fun delete(selectedIndex: Int) {
         assert(selectedIndex >= 0)
         removeAt(selectedIndex)
-        if (count() > 0) {
+        listener.onConfigChanged(list())//删除
+        if (count() > 0) {//如果不为空，选中第一个
             val index = 0
             val config = getConfigAt(index)
             choose(config.id)
             @Suppress("UNCHECKED_CAST")
-            listener.onConfigSelectedChanged(index, config as C, count())
+            listener.onConfigSelectedChanged(index, config as C)//删除后更新索引
         } else {
-            listener.onConfigSelectedChanged(Config.NONE_INDEX, null, count())
+            listener.onConfigSelectedChanged(Config.NONE_INDEX, null)
         }
     }
 
@@ -102,7 +109,8 @@ class Editor<C : Config>(
         @Suppress("UNCHECKED_CAST") val clone: C = config.dup() as C
         clone.name += "克隆"
         choose(addConfig(clone))
-        listener.onConfigSelectedChanged(lastIndex, clone, count())
+        listener.onConfigChanged(list())//克隆后增加
+        listener.onConfigSelectedChanged(lastIndex, clone)
     }
 
     /**
@@ -128,24 +136,33 @@ class Editor<C : Config>(
     fun chooseConfigAndNotify(position: Int) {
         assert(position >= 0)
         val chooseConfig = chooseConfig(position)
-        listener.onConfigSelectedChanged(position - 1, chooseConfig, count())
+        listener.onConfigSelectedChanged(position - 1, chooseConfig)
     }
 
     interface Listener<F> {
         /**
-         * 更新当前列表
+         * 选中了新的Config
          *
          * @param configIndex 选中的索引,如果是-1，代表选择的是none。是Config 的索引，而不是ui 上的索引
          */
-        fun onConfigSelectedChanged(configIndex: Int, config: F?, total: Int)
+        fun onConfigSelectedChanged(configIndex: Int, config: F?)
 
+        /**
+         * 配置变化，但是不包含配置内部的配置变化。
+         * 包括增加，删除，修改名称。发生在[onConfigSelectedChanged] 之前
+         */
+        fun onConfigChanged(list: List<Config>)
+
+        /**
+         * 创建一个新的配置
+         */
         fun onNew(): F
     }
 
     companion object {
         /**
          * 用户选中了spinner 的第一项，spinner 的第一项被认为是没有选中任何选项
-         * 对应ConfigManager 的NONE_INDEX
+         * 对应ConfigManager 的[Config.NONE_INDEX]
          */
         const val UNSELECTED_INDEX = 0
     }

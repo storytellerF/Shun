@@ -25,6 +25,7 @@ import com.storyteller_f.sort_ui.adapter.SortItemAdapter
 import com.storyteller_f.sort_ui.adapter.SortViewHolderFactory
 import com.storyteller_f.common_dialog.ChooseSortAdapter
 import com.storyteller_f.common_dialog.ChooseSortDialog
+import com.storyteller_f.config_core.Config
 import com.storyteller_f.config_core.Core
 import com.storyteller_f.sort_ui.databinding.DialogSortBinding
 
@@ -59,11 +60,14 @@ class SortDialog<Item : Any>(
             @SuppressLint("NotifyDataSetChanged")
             override fun onConfigSelectedChanged(
                 configIndex: Int,
-                config: SortConfig?,
-                total: Int
+                config: SortConfig?
             ) {
                 flashEditingFromLocal(config)
                 sortItemAdapter.notifyDataSetChanged()
+            }
+
+            override fun onConfigChanged(list: List<Config>) {
+
             }
 
             override fun onNew(): SortConfig {

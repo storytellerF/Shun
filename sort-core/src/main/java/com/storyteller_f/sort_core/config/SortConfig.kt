@@ -21,9 +21,9 @@ class SortConfig(name: String) : Config(name, 0) {
         }
 
         val emptySortListener = object : Editor.Listener<SortConfig> {
-            override fun onConfigSelectedChanged(configIndex: Int, config: SortConfig?, total: Int) {
+            override fun onConfigSelectedChanged(configIndex: Int, config: SortConfig?) {}
 
-            }
+            override fun onConfigChanged(list: List<Config>) {}
 
             override fun onNew() = create()
 

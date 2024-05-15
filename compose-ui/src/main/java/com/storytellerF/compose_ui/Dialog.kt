@@ -25,7 +25,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.google.gson.TypeAdapterFactory
 import com.storyteller_f.config_core.Config
 import com.storyteller_f.config_core.ConfigItem
+import com.storyteller_f.config_core.ConfigList
 import com.storyteller_f.config_core.Core
 import com.storyteller_f.config_core.DefaultDialog
 import com.storyteller_f.config_core.Editor
@@ -54,6 +54,7 @@ import com.storyteller_f.sort_core.config.SortChain
 import com.storyteller_f.sort_core.config.SortConfig
 import com.storyteller_f.sort_core.config.sortConfigAdapterFactory
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ReorderableItem
@@ -130,13 +131,13 @@ fun <Item, CItem : ConfigItem> SortDialog(
 }
 
 @Composable
-fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
+fun <ConfigImpl : Config, Item, CoreImpl : Core, CItem : ConfigItem> ConfigEditor(
     suffix: String,
-    listener: DefaultDialog.Listener<O, CItem>,
-    createNew: () -> C,
-    filters: List<O>,
-    flow: MutableSharedFlow<Unit>,
-    content: @Composable (O, ItemChange<O>) -> Unit,
+    listener: DefaultDialog.Listener<CoreImpl, CItem>,
+    createNew: () -> ConfigImpl,
+    filters: List<CoreImpl>,
+    eventFlow: MutableSharedFlow<Unit>,
+    content: @Composable (CoreImpl, ItemChange<CoreImpl>) -> Unit,
     vararg factory: TypeAdapterFactory?
 ) {
     val context = LocalContext.current
@@ -149,51 +150,38 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
             }
         }
     }
-    val state = wrapped.first
-    val safeListener = wrapped.second
 
-    val editingList by state.second.collectAsState()
-    var currentSelected by remember {
-        mutableStateOf<C?>(null)
+    val wrappedEditorListener by remember {
+        mutableStateOf(wrapperEditorListener(createNew))
     }
-    var count by remember {
-        mutableIntStateOf(0)
-    }
-    var currentConfigIndex by remember {
-        mutableIntStateOf(0)
-    }
-    val simpleDialog by simpleDialogState<C, CItem, Item, O>(
+
+    val simpleDialog by rememberSimpleDialogState<ConfigImpl, CItem, Item, CoreImpl>(
         context, suffix,
-        object : Editor.Listener<C> {
-            override fun onConfigSelectedChanged(configIndex: Int, config: C?, total: Int) {
-                currentSelected = config
-                currentConfigIndex = configIndex
-                count = total
-            }
-
-            override fun onNew() = createNew()
-
-        },
-        safeListener,
+        wrappedEditorListener.listener,
+        wrapped.second,
         *factory,
     )
     val scope = rememberCoroutineScope()
-    val draggingState = rememberReorderableLazyListState(onMove = { from, to ->
-        simpleDialog?.tempMove(from.index, to.index)
-    })
+
     Column {
-        Header(simpleDialog, currentSelected, count, {
+        val currentSelected by wrappedEditorListener.currentConfig.collectAsState()
+        val allConfig by wrappedEditorListener.allConfig.collectAsState()
+        Header(currentSelected, allConfig, updateConfig = {
             simpleDialog?.replace(it)
         }, chooseConfig = {
             simpleDialog?.chooseConfig(it)
         }) { name: String ->
-            simpleDialog?.sendCommand(name, currentConfigIndex + 1)
+            simpleDialog?.sendCommand(name)
             Unit
         }
         AddFunction(filters) {
             simpleDialog?.addToEditing(it)
         }
 
+        val editingList by wrapped.first.second.collectAsState()
+        val draggingState = rememberReorderableLazyListState(onMove = { from, to ->
+            simpleDialog?.tempMove(from.index, to.index)
+        })
         LazyColumn(
             modifier = Modifier
                 .height(120.dp)
@@ -205,7 +193,7 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
                 editingList[it].id
             }) { index ->
                 val data = editingList[index]
-                val refresh = ItemChange<O> {
+                val refresh = ItemChange<CoreImpl> {
                     simpleDialog?.replace(it, index)
                 }
 
@@ -220,9 +208,9 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
         }
     }
 
-    DisposableEffect(flow) {
+    DisposableEffect(eventFlow) {
         val launch = scope.launch {
-            flow.collectLatest {
+            eventFlow.collectLatest {
                 simpleDialog?.saveCurrentConfig()
             }
         }
@@ -234,7 +222,7 @@ fun <C : Config, Item, O : Core, CItem : ConfigItem> ConfigEditor(
 }
 
 @Composable
-private fun <C : Config, CItem : ConfigItem, Item, O : Core> simpleDialogState(
+private fun <C : Config, CItem : ConfigItem, Item, O : Core> rememberSimpleDialogState(
     context: Context,
     suffix: String,
     editorListener: Editor.Listener<C>,
@@ -253,10 +241,9 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> simpleDialogState(
 }
 
 @Composable
-private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
-    simpleDialog: SimpleDialog<C, Item, O, CItem>?,
+private fun <C : Config> Header(
     lastConfig: C?,
-    count: Int,
+    count: ConfigList?,
     updateConfig: (C) -> Unit,
     chooseConfig: (Int) -> Unit,
     sendCommand: (String) -> Unit
@@ -298,12 +285,11 @@ private fun <C : Config, CItem : ConfigItem, Item, O : Core> Header(
                 .clickable {
                     chooseAndHideSpinner(0)
                 })
-            repeat(count) {
-                val configAt = simpleDialog?.editor?.getConfigAt(it)
-                Text(text = configAt?.name.toString(), modifier = Modifier
+            count?.list?.forEachIndexed { index, config ->
+                Text(text = config.name, modifier = Modifier
                     .padding(8.dp)
                     .clickable {
-                        chooseAndHideSpinner(it + 1)
+                        chooseAndHideSpinner(index + 1)
                     })
             }
         }
@@ -403,3 +389,29 @@ private fun <O : Core> AddFunction(
     }
 }
 
+class EditorListenerWrapper<ConfigImpl : Config>(
+    val allConfig: MutableStateFlow<ConfigList>,
+    val currentConfig: MutableStateFlow<ConfigImpl?>,
+    val listener: Editor.Listener<ConfigImpl>
+)
+
+fun <ConfigImpl : Config> wrapperEditorListener(createNew: () -> ConfigImpl): EditorListenerWrapper<ConfigImpl> {
+    val mutableStateFlow = MutableStateFlow(ConfigList(emptyList()))
+    val currentConfigStateFlow = MutableStateFlow<ConfigImpl?>(null)
+    val editorListener = object : Editor.Listener<ConfigImpl> {
+        override fun onConfigSelectedChanged(
+            configIndex: Int,
+            config: ConfigImpl?
+        ) {
+            currentConfigStateFlow.value = config
+        }
+
+        override fun onConfigChanged(list: List<Config>) {
+            mutableStateFlow.value = ConfigList(list)
+        }
+
+        override fun onNew() = createNew()
+
+    }
+    return EditorListenerWrapper(mutableStateFlow, currentConfigStateFlow, editorListener)
+}

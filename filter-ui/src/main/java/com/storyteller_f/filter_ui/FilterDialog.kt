@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.storyteller_f.common_dialog.ChooseSortAdapter
 import com.storyteller_f.common_dialog.ChooseSortDialog
+import com.storyteller_f.config_core.Config
 import com.storyteller_f.config_core.ConfigItem
 import com.storyteller_f.config_core.Core
 import com.storyteller_f.config_core.DefaultDialog
@@ -37,7 +38,7 @@ class FilterDialog<Item>(
     factory: FilterViewHolderFactory<Item>,
     adapterFactory: RuntimeTypeAdapterFactory<ConfigItem>
 ) : DefaultDialog<FilterConfig, Item, Filter<Item>, FilterConfigItem>(listener) {
-    private val chooseFilterDialog: ChooseSortDialog
+    private val chooseFilterDialog = ChooseSortDialog(context, filters)
     private val filterItemAdapter = FilterItemAdapter(editing, factory)
     private val filterView = setupView(context)
     private val configEditor: ConfigEditor<FilterConfig> =
@@ -48,7 +49,6 @@ class FilterDialog<Item>(
     val selfDialog: AlertDialog
 
     init {
-        chooseFilterDialog = ChooseSortDialog(context, filters)
         chooseFilterDialog.setListener(object : ChooseSortAdapter.Listener {
             @Suppress("UNCHECKED_CAST")
             override fun onChoose(t: Core) = addToEnd(t as Filter<Item>)
@@ -62,11 +62,14 @@ class FilterDialog<Item>(
             @SuppressLint("NotifyDataSetChanged")
             override fun onConfigSelectedChanged(
                 configIndex: Int,
-                config: FilterConfig?,
-                total: Int
+                config: FilterConfig?
             ) {
                 flashEditingFromLocal(config)
                 filterItemAdapter.notifyDataSetChanged()
+            }
+
+            override fun onConfigChanged(list: List<Config>) {
+
             }
 
             override fun onNew() = FilterConfig.create()

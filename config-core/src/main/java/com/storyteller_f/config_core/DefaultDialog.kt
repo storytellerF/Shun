@@ -33,8 +33,7 @@ abstract class DefaultDialog<C : Config, Item, O, CItem : ConfigItem>(val listen
     private fun readHistoryToEditing(config: C?) {
         editing.clear()
         if (config != null) {
-            @Suppress("UNCHECKED_CAST")
-            addAll(listener.onRestoreState(config.configItems.toList() as List<CItem>))
+            @Suppress("UNCHECKED_CAST") addAll(listener.onRestoreState(config.configItems.toList() as List<CItem>))
         }
         listener.onEditingChanged(editing.toList())
     }
@@ -120,8 +119,7 @@ abstract class DefaultDialog<C : Config, Item, O, CItem : ConfigItem>(val listen
 }
 
 open class SimpleDialog<C : Config, Item, O, CItem : ConfigItem>(
-    listener: Listener<O, CItem>,
-    val editor: Editor<C>
+    listener: Listener<O, CItem>, val editor: Editor<C>
 ) : DefaultDialog<C, Item, O, CItem>(
     listener
 ) {
@@ -139,6 +137,8 @@ open class SimpleDialog<C : Config, Item, O, CItem : ConfigItem>(
      * 需要确保当前选中了配置，否则会出现异常。
      */
     fun sendCommand(name: String, position: Int) = editor.sendCommand(name, position)
+
+    fun sendCommand(name: String) = sendCommand(name, editor.lastIndex + 1)
 
     /**
      * @param position 0 代表未选中
@@ -195,3 +195,5 @@ fun <O, CItem : ConfigItem> listenerWrapper(l: DefaultDialog.Listener<O, CItem>)
         editing
     )
 }
+
+data class ConfigList(val list: List<Config>)
