@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk android:minSdkVersion="19" tools:overrideLibrary="io.mockk.android,io.mockk.proxy.android" />
+
+</manifest>

@@ -46,7 +46,7 @@ class Shun : ConfigIndex {
     private val configs = ArrayList<Config>()
 
     /**
-     * 当前选中的id
+     * 当前选中的id，从0 开始
      */
     private var lastId = 0
 

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.storyteller_f.common_dialog.ChooseSortAdapter.ChooseViewHolder
 import com.storyteller_f.config_core.Core
@@ -39,16 +40,17 @@ class ChooseSortAdapter(private val config: List<Core>) :
     }
 
     class ChooseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var name: TextView
-        private var icon: ImageView
-
-        init {
-            name = itemView.findViewById(R.id.choose_name)
-            icon = itemView.findViewById(R.id.choose_icon)
-        }
+        var name: TextView = itemView.findViewById(R.id.choose_name)
+        private var icon: ImageView = itemView.findViewById(R.id.choose_icon)
 
         fun bind(sortChain: Core) {
             name.text = sortChain.showName
+            icon.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    android.R.color.darker_gray
+                )
+            )
         }
 
         companion object {

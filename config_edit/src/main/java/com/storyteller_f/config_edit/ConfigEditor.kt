@@ -26,7 +26,6 @@ import com.storyteller_f.config_core.ConfigIndex
 import com.storyteller_f.config_core.Editor
 import com.storyteller_f.config_core.EditorKey
 import com.storyteller_f.config_core.editor
-import java.io.IOException
 
 /**
  * 所有选中的ui 上的变动都转发给editor，然后通过editor.listener 更下下游和ui
@@ -53,7 +52,6 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
         }
     }
 
-    @Throws(IOException::class)
     fun init(
         name: String,
         editorListener: Editor.Listener<C>,
@@ -61,7 +59,7 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
     ) {
         val spinnerAdapter = createSpinnerAdapter()
         this.spinnerAdapter = spinnerAdapter
-        editor = createEditor(name, editorListener, factory, spinnerAdapter)
+        editor = createEditor(name, editorListener, spinnerAdapter, factory)
         spinner.onItemSelectedListener = createSpinnerListener()
         spinner.adapter = spinnerAdapter
         spinner.setSelection(editor.lastIndex + 1)
@@ -70,8 +68,8 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
     private fun createEditor(
         name: String,
         editorListener: Editor.Listener<C>,
-        factory: Array<out TypeAdapterFactory?>,
-        spinnerAdapter: SpinnerAdapter
+        spinnerAdapter: SpinnerAdapter,
+        factory: Array<out TypeAdapterFactory?>
     ) = EditorKey.createEditorKey(context.filesDir.absolutePath, name)
         .editor(object : Editor.Listener<C> {
             override fun onConfigSelectedChanged(configIndex: Int, config: C?) {
@@ -83,7 +81,7 @@ class ConfigEditor<C : Config> @JvmOverloads constructor(
             }
 
             override fun onConfigChanged(list: List<Config>) {
-
+                editorListener.onConfigChanged(list)
             }
 
             override fun onNew() = editorListener.onNew()

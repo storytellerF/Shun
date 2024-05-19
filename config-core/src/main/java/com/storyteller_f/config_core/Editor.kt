@@ -18,6 +18,10 @@ class EditorKey(private val prefix: String, private val suffix: String) {
 }
 
 val editors = mutableMapOf<EditorKey, Editor<*>>()
+
+/**
+ * 如果配置不存在，会自动创建一个空的Config
+ */
 fun <C : Config> EditorKey.editor(
     listener: Editor.Listener<C>,
     vararg factory: TypeAdapterFactory?

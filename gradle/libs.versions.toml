@@ -16,6 +16,8 @@ lifecycleRuntimeKtx = "2.7.0"
 material = "1.12.0"
 material3 = "1.2.1"
 mockitoAndroid = "5.4.0"
+mockkAgent = "1.13.11"
+mockkAndroid = "1.13.11"
 reorderable = "0.9.6"
 android = "8.4.0"
 kotlin = "1.9.23"
@@ -46,6 +48,8 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 material3 = { module = "androidx.compose.material3:material3" }
 mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockitoAndroid" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoAndroid" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockkAgent" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
 reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "reorderable" }
 ui = { module = "androidx.compose.ui:ui" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }

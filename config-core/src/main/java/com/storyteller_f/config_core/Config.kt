@@ -14,7 +14,7 @@ abstract class Config(var name: String, var id: Int = 0) : Duplicable, Serializa
     companion object {
         const val NONE_INDEX = -1
         const val NONE_ID = -1
-        const val DEFAULT_FACTORY_KEY = "config_edit_filter_config_key"
+        const val DEFAULT_FILTER_FACTORY_KEY = "config_edit_filter_config_key"
         const val DEFAULT_SORT_FACTORY_KEY = "config_edit_sort_config_key"
     }
 }
